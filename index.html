@@ -104,9 +104,9 @@ model-viewer::part(default-progress-bar){background:var(--tape);height:3px}
 .reel-pin::after{content:"";position:absolute;inset:0;z-index:5;pointer-events:none;background:radial-gradient(ellipse 85% 80% at 55% 50%, transparent 55%, rgba(4,8,22,.6) 100%)}
 .seam{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;overflow:visible}
 .obj,.bt{position:absolute;left:0;top:0;pointer-events:none;user-select:none;-webkit-user-drag:none;will-change:transform,opacity;backface-visibility:hidden}
-.obj{z-index:2;height:auto;filter:drop-shadow(0 38px 42px rgba(0,0,0,.55)) drop-shadow(0 6px 10px rgba(0,0,0,.35))}
-#tapeCv{position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none}
-.obj.sc{width:min(44vw,620px)} .obj.sp{width:min(46vw,600px)}
+.obj{z-index:2;height:auto}
+#tapeCv{position:absolute;left:0;top:0;z-index:2;pointer-events:none;will-change:transform,opacity}
+.obj.sc{width:min(52vw,730px)} .obj.sp{width:min(54vw,700px)}
 .bt{z-index:1}
 .bt.front{z-index:3}
 .needle-tip{position:absolute;left:0;top:0;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;z-index:3;pointer-events:none;
@@ -410,7 +410,7 @@ tbody tr:hover{background:color-mix(in srgb,var(--tape) 10%,transparent)}
   .beat .eyebrow{margin-bottom:12px}
   .beat .cta{margin-top:18px}
   .beat .btn{padding:13px 16px;font-size:14px}
-  .obj.sc{width:96vw} .obj.sp{width:82vw}
+  .obj.sc{width:106vw} .obj.sp{width:94vw}
   .beam{left:-10%;width:60%} .beam.b2{left:30%;width:30%}
   .reel-ruler{top:auto;bottom:16px;right:16px;width:34px;height:30%}
   .reel-ruler .mk{font-size:10px}
@@ -502,7 +502,7 @@ tbody tr:hover{background:color-mix(in srgb,var(--tape) 10%,transparent)}
 @media (hover:none), (pointer:coarse){
   .top{backdrop-filter:none;-webkit-backdrop-filter:none;background:var(--hero)}
   .piece:hover{transform:none}
-  .obj{filter:drop-shadow(0 26px 26px rgba(0,0,0,.5))}
+
 }
 @media (prefers-reduced-motion: reduce){
   *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
@@ -551,8 +551,8 @@ tbody tr:hover{background:color-mix(in srgb,var(--tape) 10%,transparent)}
       <div class="needle-tip" id="needleTip" aria-hidden="true"></div>
       <div id="buttons" aria-hidden="true"></div>
       <canvas id="tapeCv" aria-hidden="true"></canvas>
-      <img class="obj sc" id="oSc" src="assets/img/tesoura.webp" alt="" width="783" height="235" decoding="async">
-      <img class="obj sp" id="oSp" src="assets/img/carreteis.webp" alt="" width="683" height="311" decoding="async">
+      <img class="obj sc" id="oSc" src="assets/img/tesoura.webp" alt="" width="923" height="375" decoding="async">
+      <img class="obj sp" id="oSp" src="assets/img/carreteis.webp" alt="" width="805" height="433" decoding="async">
 
       <div class="reel-copy">
         <div class="beat" data-c="0.06">
@@ -1131,57 +1131,64 @@ $$('.prod model-viewer').forEach(mv=>{
   function drawDust(){ ctx.clearRect(0,0,W,H); for(const d of parts){ if(!RM){ d.x+=d.vx; d.y+=d.vy; if(d.y<-4){d.y=H+4;d.x=Math.random()*W} }
     const inBeam=d.x>W*.05&&d.x<W*.55; ctx.globalAlpha=d.a*(inBeam?1:.35); ctx.fillStyle='#FFE9B8'; ctx.beginPath(); ctx.arc(d.x,d.y,d.r,0,7); ctx.fill(); } ctx.globalAlpha=1; }
 
-  // fita métrica desenhada em código: faixa de dois lados (amarela/branca) que torce, com marcações e números de cm
-  const tcv=$('#tapeCv'), tctx=tcv.getContext('2d'); let TP=[], TL=1, TW=34;
+  // fita métrica desenhada em código: faixa de dois lados (amarela/branca) que torce, com marcações e números de cm.
+  // O canvas tem só o tamanho da fita e é movido por CSS (GPU); o desenho só é refeito quando a fita desenrola.
+  const tcv=$('#tapeCv'), tctx=tcv.getContext('2d'); let TP=[], TL=1, TW=34, tOx=0, tOy=0, lastK=-1;
   const mixc=(a,b,t)=>a.map((v,i)=>Math.round(v+(b[i]-v)*t));
   const Y0=[196,148,0], Y1=[255,214,64], B0=[160,165,176], B1=[246,247,250];
   function buildTape(){
-    const dpr=mob?1.5:Math.min(2,devicePixelRatio||1); tcv.width=W*dpr; tcv.height=H*dpr; tctx.setTransform(dpr,0,0,dpr,0,0);
     const S=mob?W*.92:Math.min(W*.62,840); TW=mob?28:38;
     const P=[[-.55*S,.20*S],[-.12*S,.48*S],[.02*S,-.42*S],[.52*S,-.14*S]];
-    const N=520; TP=[]; let acc=0, prev=null;
+    const N=mob?360:520; TP=[]; let acc=0, prev=null, minX=1e9,minY=1e9,maxX=-1e9,maxY=-1e9;
     for(let i=0;i<=N;i++){ const u=i/N, v=1-u;
       const x=v*v*v*P[0][0]+3*v*v*u*P[1][0]+3*v*u*u*P[2][0]+u*u*u*P[3][0];
       const y=v*v*v*P[0][1]+3*v*v*u*P[1][1]+3*v*u*u*P[2][1]+u*u*u*P[3][1];
-      if(prev) acc+=Math.hypot(x-prev[0],y-prev[1]); TP.push({x,y,s:acc}); prev=[x,y]; }
+      if(prev) acc+=Math.hypot(x-prev[0],y-prev[1]); TP.push({x,y,s:acc}); prev=[x,y];
+      minX=Math.min(minX,x);minY=Math.min(minY,y);maxX=Math.max(maxX,x);maxY=Math.max(maxY,y); }
     TL=acc;
     for(let i=0;i<TP.length;i++){ const a=TP[Math.max(0,i-1)], b=TP[Math.min(TP.length-1,i+1)]; const dx=b.x-a.x, dy=b.y-a.y, l=Math.hypot(dx,dy)||1;
       const q=TP[i]; q.tx=dx/l; q.ty=dy/l; q.nx=-dy/l; q.ny=dx/l;
       const tw=Math.cos(q.s*.0075+.5); q.f=.22+.78*Math.abs(tw); q.front=tw>=0;
       q.light=.5+.5*clamp(-(q.nx*.6+q.ny*.8)); }
+    const m=TW+28, bw=Math.ceil(maxX-minX+2*m), bh=Math.ceil(maxY-minY+2*m);
+    tOx=-minX+m; tOy=-minY+m;
+    // resolução alta: até 3x a densidade da tela (nítido em telas retina)
+    const dpr=Math.min(3,Math.max(1,devicePixelRatio||1));
+    tcv.width=Math.round(bw*dpr); tcv.height=Math.round(bh*dpr); tcv.style.width=bw+'px'; tcv.style.height=bh+'px';
+    tcv.style.transformOrigin=`${tOx}px ${tOy}px`; tctx.setTransform(dpr,0,0,dpr,0,0); lastK=-1;
   }
-  function drawTape(k,ox,oy,rot,sc2,alpha){
-    const c=tctx; c.clearRect(0,0,W,H); if(alpha<=.01||k<=0) return;
-    c.save(); c.globalAlpha=alpha; c.translate(ox,oy); c.rotate(rot*Math.PI/180); c.scale(sc2,sc2);
+  function drawTape(k){
+    if(Math.abs(k-lastK)<.0015) return; lastK=k;
+    const c=tctx; c.save(); c.setTransform(1,0,0,1,0,0); c.clearRect(0,0,tcv.width,tcv.height); c.restore();
+    c.save(); c.translate(tOx,tOy);
     const Lk=k*TL; let last=0; while(last<TP.length-1&&TP[last+1].s<=Lk) last++;
-    // sombra suave projetada
     c.lineCap='round'; c.lineJoin='round';
     for(const [off,wd,al] of [[18,TW*1.1,.10],[12,TW*.8,.14],[7,TW*.55,.16]]){ c.beginPath(); c.moveTo(TP[0].x+off*.6,TP[0].y+off);
       for(let i=1;i<=last;i+=3) c.lineTo(TP[i].x+off*.6,TP[i].y+off); c.strokeStyle=`rgba(0,0,0,${al})`; c.lineWidth=wd; c.stroke(); }
-    // faixa, segmento a segmento
     for(let i=0;i<last;i++){ const a=TP[i], b=TP[i+1], ha=TW*a.f/2, hb=TW*b.f/2;
       const sh=.35+.65*(a.f*.7+a.light*.3), col=a.front?mixc(Y0,Y1,sh):mixc(B0,B1,sh);
       c.fillStyle=`rgb(${col})`; c.beginPath();
       c.moveTo(a.x+a.nx*ha,a.y+a.ny*ha); c.lineTo(b.x+b.nx*hb,b.y+b.ny*hb); c.lineTo(b.x-b.nx*hb,b.y-b.ny*hb); c.lineTo(a.x-a.nx*ha,a.y-a.ny*ha); c.closePath(); c.fill(); }
-    // bordas
     c.lineWidth=1; c.strokeStyle='rgba(60,40,0,.45)';
     for(const sgn of [1,-1]){ c.beginPath(); for(let i=0;i<=last;i++){ const q=TP[i], h=sgn*TW*q.f/2; i?c.lineTo(q.x+q.nx*h,q.y+q.ny*h):c.moveTo(q.x+q.nx*h,q.y+q.ny*h);} c.stroke(); }
-    // marcações: a cada 0,5 cm um traço, números a cada 1 cm (só onde a fita está de frente)
     const step=TW*.42; c.font=`700 ${Math.round(TW*.36)}px "DM Mono", monospace`; c.textAlign='center'; c.textBaseline='middle';
     let j=0;
     for(let i=0;i<=last;i++){ const q=TP[i]; if(q.s<j*step) continue; const n=j; j++; if(q.f<.5) continue;
       const h=TW*q.f/2, len=TW*q.f*(n%2===0?.42:.24), ink=q.front?'rgba(30,20,0,.85)':'rgba(25,30,40,.8)';
       c.strokeStyle=ink; c.lineWidth=n%2===0?1.6:1; c.beginPath(); c.moveTo(q.x+q.nx*h,q.y+q.ny*h); c.lineTo(q.x+q.nx*(h-len),q.y+q.ny*(h-len)); c.stroke();
       if(n%2===0 && q.f>.72){ c.save(); c.translate(q.x-q.nx*h*.28,q.y-q.ny*h*.28); c.rotate(Math.atan2(q.ty,q.tx)); c.fillStyle=ink; c.fillText(String(n/2|0),0,0); c.restore(); } }
-    // ponteira de metal na ponta que desenrola
     const e=TP[last], hw=TW*e.f/2+2; c.save(); c.translate(e.x,e.y); c.rotate(Math.atan2(e.ty,e.tx));
     const g=c.createLinearGradient(0,-hw,0,hw); g.addColorStop(0,'#F2F4F7'); g.addColorStop(.5,'#8D939C'); g.addColorStop(1,'#E1E4E9');
     c.fillStyle=g; c.fillRect(-2,-hw,10,hw*2); c.fillStyle='rgba(0,0,0,.35)'; c.fillRect(-2,-hw,2,hw*2); c.restore();
     c.restore();
   }
 
-  function measure(){
-    W=pin.clientWidth; H=pin.clientHeight; mob=W<720;
+  let mW=0, mH=0;
+  function measure(force){
+    const w=pin.clientWidth, h=pin.clientHeight;
+    // a barra do navegador no celular muda a altura ao rolar: ignora mudanças pequenas para não refazer a cena
+    if(!force && w===mW && Math.abs(h-mH)<120){ top0=reel.getBoundingClientRect().top+scrollY-HEAD; span=Math.max(1,reel.offsetHeight-H); return; }
+    mW=w; mH=h; W=w; H=h; mob=W<720;
     top0=reel.getBoundingClientRect().top+scrollY-HEAD; span=Math.max(1,reel.offsetHeight-H);
     svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
     const d=mob
@@ -1189,52 +1196,60 @@ $$('.prod model-viewer').forEach(mv=>{
       : `M ${-.03*W} ${.84*H} C ${.22*W} ${1.0*H}, ${.34*W} ${.42*H}, ${.6*W} ${.56*H} S ${.88*W} ${.16*H}, ${1.05*W} ${.28*H}`;
     [sReveal,sChalk,sThread].forEach(e=>e.setAttribute('d',d)); len=sThread.getTotalLength();
     [sc,sp].forEach(e=>{ e._w=e.offsetWidth; e._h=e.offsetHeight; });
-    rulerH=mk.parentElement.offsetHeight; seedDust(); buildTape(); lastT=-1;
+    rulerH=mk.parentElement.offsetHeight; seedDust(); if(mob||RM) drawDust(); buildTape(); lastT=-1;
   }
   const put=(el,x,y,rot,s,op)=>{ el.style.transform=`translate3d(${(x-el._w/2).toFixed(1)}px,${(y-el._h/2).toFixed(1)}px,0) rotate(${rot.toFixed(2)}deg) scale(${s.toFixed(3)})`; el.style.opacity=op.toFixed(3); };
+  let lastCm=-1;
 
   function render(t){
-    const cx=mob?W*.52:W*.66, cy=mob?H*.7:H*.53, wob=RM?0:1;
-    // 1) fita métrica: já meio desenrolada em repouso, termina de desenrolar e sai pela esquerda
+    // no celular nada balança sozinho: tudo segue só o dedo, para não tremer durante a rolagem
+    const cx=mob?W*.52:W*.66, cy=mob?H*.7:H*.53, wob=(RM||mob)?0:1;
     const oT=ease(seg(p,.2,.42)), kT=lerp(.58,1,ease(seg(p,0,.2)));
-    drawTape(kT, cx-oT*.9*W, cy-oT*.1*H+Math.sin(t*.6)*5*wob*(1-oT), lerp(-6,2,seg(p,0,.2))-oT*24, lerp(1,1.05,seg(p,0,.2))*lerp(1,.8,oT), 1-seg(p,.32,.42));
-    // 2) tesoura: entra pela direita, acompanha a costura e sai
+    drawTape(kT);
+    const tx=cx-oT*.9*W, ty=cy-oT*.1*H+Math.sin(t*.6)*5*wob*(1-oT), tr=lerp(-6,2,seg(p,0,.2))-oT*24, ts=lerp(1,1.05,seg(p,0,.2))*lerp(1,.8,oT);
+    tcv.style.transform=`translate3d(${(tx-tOx).toFixed(1)}px,${(ty-tOy).toFixed(1)}px,0) rotate(${tr.toFixed(2)}deg) scale(${ts.toFixed(3)})`;
+    tcv.style.opacity=(1-seg(p,.32,.42)).toFixed(3);
     const iS=out(seg(p,.24,.44)), cut=ease(seg(p,.44,.62)), xS=ease(seg(p,.62,.8));
     put(sc, cx+lerp(.7*W,0,iS)-cut*(mob?.1:.03)*W-xS*.9*W, cy+lerp(.25*H,0,iS)+cut*.03*H-xS*.1*H, lerp(48,-16,iS)+Math.sin(cut*Math.PI*4)*3-xS*20, 1, clamp(iS*1.4)*(1-seg(p,.72,.8)));
-    // 3) carretéis: sobem até o centro
     const iP=out(seg(p,.66,.88));
     put(sp, cx+lerp(.15*W,0,iP), cy+lerp(.75*H,0,iP)+Math.sin(t*.7)*5*wob*iP, lerp(-24,-8,iP), lerp(.8,1,iP), clamp(iP*1.3));
-    // costura se desenhando, com a ponta da agulha brilhando
     const k=ease(seg(p,.28,.72));
     sReveal.style.strokeDashoffset=(1-k).toFixed(4);
     const pt=sThread.getPointAtLength(k*len);
     tip.style.transform=`translate3d(${pt.x.toFixed(1)}px,${pt.y.toFixed(1)}px,0)`; tip.style.opacity=k>0.002&&k<.998?1:0;
-    // botões em camadas de profundidade (paralaxe)
     for(const b of bts){
       const bx=(mob?.06+b.x*.88:b.x)*W+Math.sin(t*.5+b.ph)*4*wob, by=(mob?.46+b.y*.54:b.y)*H+(.3-p)*H*(mob?.35:.9)*b.z+Math.sin(t*.8+b.ph)*6*b.z*wob;
       b.el.style.transform=`translate3d(${(bx-b.s/2).toFixed(1)}px,${(by-b.s/2).toFixed(1)}px,0) rotate(${(b.r0+p*220*b.z*b.dir).toFixed(1)}deg)`;
     }
     beams[0].style.transform=`rotate(${(-22+p*16).toFixed(2)}deg)`; beams[1].style.transform=`rotate(${(-14+p*10).toFixed(2)}deg)`;
-    beams[0].style.opacity=(.85+.15*Math.sin(t*.4)*wob).toFixed(3);
+    if(wob) beams[0].style.opacity=(.85+.15*Math.sin(t*.4)).toFixed(3);
     for(const b of beats){ const c=+b.dataset.c, op=clamp(1-(Math.abs(p-c)-.15)/.08);
-      b.style.opacity=op.toFixed(3); b.style.translate=`0 ${((c-p)*70).toFixed(1)}px`; b.classList.toggle('off',op<.02); }
-    mk.style.transform=`translateY(${(p*rulerH).toFixed(1)}px) translateY(-50%)`; mk.textContent=Math.round(p*120)+' cm';
-    reel.classList.toggle('started',p>.015);
-    drawDust();
+      b.style.opacity=op.toFixed(3); b.style.translate=`0 ${((c-p)*70).toFixed(1)}px`; const off=op<.02; if(b._off!==off){ b._off=off; b.classList.toggle('off',off); } }
+    mk.style.transform=`translateY(${(p*rulerH).toFixed(1)}px) translateY(-50%)`;
+    const cm=Math.round(p*120); if(cm!==lastCm){ lastCm=cm; mk.textContent=cm+' cm'; }
+    const st=p>.015; if(reel._st!==st){ reel._st=st; reel.classList.toggle('started',st); }
+    if(wob) drawDust();
   }
+  let lastNow=0, lastP=-1;
   function frame(now){
     if(!vis){ running=false; return; }
-    const t=now/1000; p+= (pT-p)*(RM?1:mob?.2:.11);
-    if(Math.abs(pT-p)<.0002) p=pT;
-    render(t); requestAnimationFrame(frame);
+    const dt=Math.min(.05,lastNow?(now-lastNow)/1000:.016); lastNow=now;
+    // posição lida a cada quadro (não só no evento de rolagem) para acompanhar o dedo sem atraso
+    pT=clamp((scrollY-top0)/span);
+    if(mob||RM) p=pT; else { p+=(pT-p)*(1-Math.pow(.86,dt*60)); if(Math.abs(pT-p)<.0002) p=pT; }
+    render(now/1000);
+    // no celular, parado = sem trabalho: o laço dorme até a próxima rolagem
+    if((mob||RM) && p===lastP){ running=false; lastNow=0; return; }
+    lastP=p; requestAnimationFrame(frame);
   }
   function kick(){ if(!running){ running=true; requestAnimationFrame(frame); } }
-  addEventListener('scroll',()=>{ pT=clamp((scrollY-top0)/span); kick(); },{passive:true});
-  new ResizeObserver(()=>{ measure(); pT=clamp((scrollY-top0)/span); kick(); }).observe(pin);
-  new IntersectionObserver(es=>{ vis=es[0].isIntersecting; if(vis) kick(); }).observe(pin);
-  [sc,sp].forEach(im=>im.complete?0:im.addEventListener('load',()=>{ measure(); kick(); },{once:true}));
-  addEventListener('load',()=>{ measure(); pT=clamp((scrollY-top0)/span); kick(); });
-  measure(); pT=clamp((scrollY-top0)/span); p=pT; kick();
+  addEventListener('scroll',kick,{passive:true});
+  new ResizeObserver(()=>{ measure(false); lastP=-1; kick(); }).observe(pin);
+  new IntersectionObserver(es=>{ vis=es[0].isIntersecting; if(vis){ lastP=-1; kick(); } }).observe(pin);
+  [sc,sp].forEach(im=>im.complete?0:im.addEventListener('load',()=>{ measure(true); lastP=-1; kick(); },{once:true}));
+  addEventListener('load',()=>{ measure(true); lastP=-1; kick(); });
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>{ lastK=-1; lastP=-1; kick(); });
+  measure(true); pT=clamp((scrollY-top0)/span); p=pT; kick();
 })();
 $$('.chip').forEach(ch=>ch.addEventListener('click',()=>{
   $$('.chip').forEach(c=>c.setAttribute('aria-pressed',c===ch));
