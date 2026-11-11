@@ -1,0 +1,1130 @@
+<title>Retrô Kids Pedido Fácil</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Consultoria acadêmica FAINOR para a Retrô Kids: diagnóstico, proposta de inovação, plano de implementação e indicadores.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: ateliê de costura — fita métrica amarela como fio condutor (progresso, divisórias, réguas),
+   azul-marinho de farda como base, pesponto tracejado marca o que é "costurado" pela consultoria. */
+:root{
+  --bg:#F2F4F9; --surface:#FFFFFF; --surface-2:#E6EAF3; --ink:#121C38; --muted:#56607A; --line:#CBD2E2;
+  --tape:#F5B700; --tape-ink:#1F1600; --blue:#1E3A8A; --coral:#E0475F; --mint:#1F8F7C;
+  --hero:#14214A; --hero-ink:#F3F5FF; --hero-muted:#AAB5D6;
+  --shadow:0 18px 40px -22px rgba(18,28,56,.35);
+  --f-display:"Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
+  --f-body:"Figtree", "Segoe UI", system-ui, sans-serif;
+  --f-mono:"DM Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  --r:14px; --max:1180px;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0B1122; --surface:#131B32; --surface-2:#1A2442; --ink:#E8EDFB; --muted:#9CA8C7; --line:#283456;
+  --tape:#FFC51F; --tape-ink:#1F1600; --blue:#8EA9FF; --coral:#FF7088; --mint:#4CCBB2;
+  --hero:#080D1C; --hero-ink:#F3F5FF; --hero-muted:#9AA6C8; --shadow:0 18px 40px -22px rgba(0,0,0,.7); color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#0B1122; --surface:#131B32; --surface-2:#1A2442; --ink:#E8EDFB; --muted:#9CA8C7; --line:#283456;
+  --tape:#FFC51F; --tape-ink:#1F1600; --blue:#8EA9FF; --coral:#FF7088; --mint:#4CCBB2;
+  --hero:#080D1C; --hero-ink:#F3F5FF; --hero-muted:#9AA6C8; --shadow:0 18px 40px -22px rgba(0,0,0,.7); color-scheme:dark }
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font:400 17px/1.6 var(--f-body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,h3,h4{font-family:var(--f-display);line-height:1.05;margin:0;text-wrap:balance;letter-spacing:-.02em}
+p{margin:0}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--tape);outline-offset:3px;border-radius:6px}
+.wrap{max-width:var(--max);margin:0 auto;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+.mono{font-family:var(--f-mono);font-feature-settings:"tnum";font-variant-numeric:tabular-nums}
+.eyebrow{font:500 12px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:10px}
+.eyebrow b{background:var(--tape);color:var(--tape-ink);padding:5px 8px;border-radius:4px;font-weight:500}
+.lead{font-size:clamp(17px,1.6vw,20px);color:var(--muted);max-width:62ch}
+.tag{display:inline-flex;align-items:center;gap:6px;font:500 11px/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;padding:6px 9px;border-radius:99px;border:1px solid var(--line);color:var(--muted)}
+.tag.warn{border-color:var(--coral);color:var(--coral)}
+.tag.ok{border-color:var(--mint);color:var(--mint)}
+
+/* ---------- topo + fita métrica ---------- */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--hero)}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:color-mix(in srgb,var(--hero) 92%,transparent);backdrop-filter:blur(10px);color:var(--hero-ink)}
+.top .wrap{display:flex;align-items:center;gap:20px;height:58px}
+.brand{font:800 18px/1 var(--f-display);letter-spacing:-.02em;display:flex;align-items:center;gap:10px;text-decoration:none;white-space:nowrap}
+.brand i{font-style:normal;color:var(--tape)}
+.brand small{font:500 11px/1 var(--f-mono);color:var(--hero-muted);letter-spacing:.1em}
+.nav{display:flex;gap:4px;margin-left:auto;overflow-x:auto;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav a{font:500 13px/1 var(--f-body);text-decoration:none;color:var(--hero-muted);padding:9px 11px;border-radius:8px;white-space:nowrap;transition:.2s}
+.nav a:hover,.nav a.on{color:var(--hero-ink);background:rgba(255,255,255,.08)}
+.nav a.on{box-shadow:inset 0 -2px 0 var(--tape)}
+.tape{height:22px;background:var(--tape);position:relative;overflow:hidden;color:var(--tape-ink)}
+.tape .ticks{position:absolute;inset:0;background:
+  repeating-linear-gradient(90deg,rgba(31,22,0,.85) 0 1px,transparent 1px 10px) bottom/100% 6px no-repeat,
+  repeating-linear-gradient(90deg,rgba(31,22,0,.85) 0 1.5px,transparent 1.5px 50px) bottom/100% 10px no-repeat;}
+.tape .nums{position:absolute;left:0;top:3px;display:flex;font:500 9px/1 var(--f-mono);white-space:nowrap}
+.tape .nums span{width:100px;padding-left:3px}
+.tape .fill{position:absolute;inset:0 auto 0 0;width:0;background:rgba(20,33,74,.88);mix-blend-mode:multiply}
+.tape .cm{position:absolute;right:max(16px, env(safe-area-inset-right, 0px));top:4px;font:500 10px/1 var(--f-mono);background:var(--tape-ink);color:var(--tape);padding:2px 6px;border-radius:3px}
+
+/* ---------- hero ---------- */
+.hero{background:var(--hero);color:var(--hero-ink);position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;inset:auto 0 0;height:1px;background:repeating-linear-gradient(90deg,var(--tape) 0 10px,transparent 10px 18px)}
+.hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:24px;align-items:center;padding-block:56px 40px}
+.hero h1{font-size:clamp(44px,7.4vw,104px);font-weight:800;letter-spacing:-.045em;line-height:.92}
+.hero h1 em{font-style:normal;color:var(--tape);display:block}
+.hero h1 .thin{font-weight:400;font-size:.42em;letter-spacing:-.02em;display:block;color:var(--hero-muted);margin-top:14px;line-height:1.1}
+.hero .lead{color:var(--hero-muted);margin-top:22px}
+.hero .eyebrow{color:var(--hero-muted);margin-bottom:22px}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.btn{display:inline-flex;align-items:center;gap:10px;font:600 15px/1 var(--f-body);padding:15px 20px;border-radius:999px;border:0;cursor:pointer;text-decoration:none;transition:transform .2s, box-shadow .2s, background .2s}
+.btn.primary{background:var(--tape);color:var(--tape-ink);box-shadow:0 10px 30px -10px var(--tape)}
+.btn.primary:hover{transform:translateY(-2px)}
+.btn.ghost{background:transparent;color:inherit;box-shadow:inset 0 0 0 1.5px currentColor}
+.btn.ghost:hover{background:rgba(127,127,127,.12)}
+.stage{position:relative;min-height:520px;height:100%}
+#spool{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:grab}
+.stage .label{position:absolute;font:500 11px/1.3 var(--f-mono);color:var(--hero-muted);border-left:1px solid var(--tape);padding-left:8px;pointer-events:none}
+.stage .l1{top:12%;right:4%}
+.stage .l2{bottom:14%;left:2%}
+.hero-stats{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid rgba(255,255,255,.12)}
+.hero-stats div{padding:22px 18px 26px 0;display:flex;flex-direction:column;gap:6px}
+.hero-stats strong{font:800 clamp(28px,3.4vw,44px)/1 var(--f-display);letter-spacing:-.03em}
+.hero-stats span{font:500 12px/1.35 var(--f-mono);color:var(--hero-muted);letter-spacing:.04em}
+
+/* ---------- seções ---------- */
+section.sec{padding-block:96px 40px;scroll-margin-top:70px}
+.sec-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px 48px;align-items:end;margin-bottom:44px}
+.sec-head h2{font-size:clamp(34px,4.8vw,64px);font-weight:800}
+.sec-head h2 span{color:var(--blue)}
+.who{display:flex;align-items:center;gap:12px;margin-top:18px;font-size:14px;color:var(--muted)}
+.who .av{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font:700 13px/1 var(--f-display);background:var(--tape);color:var(--tape-ink)}
+.ruler{height:16px;margin-block:0 8px;background:
+  repeating-linear-gradient(90deg,var(--line) 0 1px,transparent 1px 8px) top/100% 6px no-repeat,
+  repeating-linear-gradient(90deg,var(--muted) 0 1px,transparent 1px 80px) top/100% 14px no-repeat;opacity:.9}
+
+.grid{display:grid;gap:18px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:26px;min-width:0}
+.card h3{font-size:22px;font-weight:600;margin-bottom:10px}
+.card p{color:var(--muted);font-size:15.5px}
+.stitch{border:2px dashed color-mix(in srgb,var(--blue) 45%,transparent)}
+.src{font:400 12px/1.5 var(--f-mono);color:var(--muted);margin-top:14px}
+.src a{color:var(--muted)}
+
+/* escopo: 3 etapas */
+.steps{counter-reset:s;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;position:relative}
+.steps::before{content:"";position:absolute;left:0;right:0;top:27px;border-top:2px dashed var(--line)}
+.step{position:relative;padding-right:24px}
+.step .dot{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;background:var(--surface);border:2px solid var(--blue);font:700 20px/1 var(--f-display);color:var(--blue);position:relative;z-index:1;margin-bottom:18px;transition:.3s}
+.step:hover .dot{background:var(--tape);border-color:var(--tape);color:var(--tape-ink);transform:rotate(-8deg) scale(1.06)}
+.step h3{font-size:22px;margin-bottom:8px}
+.step p{color:var(--muted);font-size:15.5px}
+
+/* empresa: timeline */
+.story{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:40px;align-items:start}
+.quote{font:600 clamp(26px,3vw,38px)/1.15 var(--f-display);letter-spacing:-.02em}
+.quote mark{background:linear-gradient(transparent 58%,var(--tape) 58%);color:inherit;padding:0 2px}
+.tl{list-style:none;margin:0;padding:0;position:relative}
+.tl::before{content:"";position:absolute;left:62px;top:6px;bottom:6px;border-left:2px dashed var(--line)}
+.tl li{display:grid;grid-template-columns:62px 1fr;gap:22px;padding-bottom:26px;position:relative}
+.tl li::after{content:"";position:absolute;left:56px;top:7px;width:14px;height:14px;border-radius:50%;background:var(--tape);box-shadow:0 0 0 4px var(--bg)}
+.tl .y{font:500 14px/1.3 var(--f-mono);color:var(--blue);padding-top:3px}
+.tl h4{font-size:19px;margin-bottom:4px;font-weight:600}
+.tl p{color:var(--muted);font-size:15px}
+
+/* catálogo */
+.cat-tools{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+.chip{font:600 13px/1 var(--f-body);padding:10px 14px;border-radius:99px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;transition:.2s}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.products{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;perspective:1100px}
+.prod{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;transform-style:preserve-3d;transition:transform .25s ease, box-shadow .25s;will-change:transform;display:flex;flex-direction:column}
+.prod:hover{box-shadow:var(--shadow)}
+.prod .ph{aspect-ratio:4/3;max-width:100%;display:grid;place-items:center;position:relative;background:
+  radial-gradient(circle at 30% 20%,color-mix(in srgb,var(--c) 22%,transparent),transparent 60%), var(--surface-2)}
+.prod .ph svg{width:62%;height:auto;filter:drop-shadow(0 18px 18px rgba(0,0,0,.18));transform:translateZ(40px);transition:transform .4s}
+.prod:hover .ph svg{transform:translateZ(60px) rotate(-3deg) scale(1.04)}
+.prod .ph .tag{position:absolute;top:14px;left:14px;background:var(--surface)}
+.prod .bd{padding:20px 22px 22px;display:flex;flex-direction:column;gap:8px;flex:1}
+.prod h3{font-size:21px;font-weight:600}
+.prod p{color:var(--muted);font-size:14.5px;flex:1}
+.prod .row{display:flex;justify-content:space-between;align-items:center;margin-top:8px;gap:10px}
+.prod .row .mono{font-size:12px;color:var(--muted)}
+.prod button{font:600 13px/1 var(--f-body);padding:10px 14px;border-radius:99px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer;transition:.2s}
+.prod button:hover{background:var(--tape);border-color:var(--tape);color:var(--tape-ink)}
+
+.clients{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.clients span{font:600 14px/1 var(--f-body);padding:12px 16px;border-radius:10px;background:var(--surface);border:1px solid var(--line)}
+
+/* números / contexto */
+.stat{display:flex;flex-direction:column;gap:6px}
+.stat strong{font:800 clamp(40px,5vw,62px)/1 var(--f-display);letter-spacing:-.04em;color:var(--ink)}
+.stat strong small{font-size:.45em;font-weight:600;color:var(--muted);margin-left:4px}
+.ring{position:relative;width:150px;height:150px;flex:none}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:14}
+.ring .bgc{stroke:var(--surface-2)}
+.ring .fg{stroke-linecap:round;transition:stroke-dashoffset 1.6s cubic-bezier(.2,.8,.2,1)}
+.ring b{position:absolute;inset:0;display:grid;place-items:center;font:800 32px/1 var(--f-display);letter-spacing:-.03em}
+.ringrow{display:flex;gap:22px;align-items:center}
+.chart-box{position:relative;height:300px;min-width:0}
+
+/* SWOT flip */
+.swot{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;perspective:1400px}
+.flip{position:relative;min-height:250px;cursor:pointer;border:0;background:none;padding:0;text-align:left;font:inherit;color:inherit}
+.flip .in{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .8s cubic-bezier(.2,.8,.2,1)}
+.flip[aria-expanded="true"] .in{transform:rotateY(180deg)}
+.flip .f,.flip .b{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:18px;padding:26px;display:flex;flex-direction:column}
+.flip .f{background:var(--c);color:#fff}
+.flip .f .k{font:800 120px/0.8 var(--f-display);letter-spacing:-.06em;opacity:.95}
+.flip .f h3{font-size:28px;margin-top:auto}
+.flip .f small{font:500 12px/1 var(--f-mono);opacity:.85;letter-spacing:.08em;text-transform:uppercase;margin-top:8px}
+.flip .b{background:var(--surface);border:2px solid var(--c);transform:rotateY(180deg)}
+.flip .b h3{font-size:20px;margin-bottom:12px;color:var(--c)}
+.flip .b ul{margin:0;padding-left:18px;color:var(--ink);font-size:15.5px;display:grid;gap:8px}
+.flip .b .tag{margin-top:auto;align-self:flex-start}
+
+/* processo */
+.flow{display:flex;gap:0;overflow-x:auto;padding:6px 2px 18px;scroll-snap-type:x mandatory}
+.flow li{list-style:none;flex:1 0 140px;scroll-snap-align:start;position:relative;padding-right:14px}
+.flow li::before{content:"";position:absolute;top:21px;left:44px;right:0;border-top:2px dashed var(--line)}
+.flow li:last-child::before{display:none}
+.flow .n{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--surface);border:1.5px solid var(--line);font:500 14px/1 var(--f-mono);position:relative;z-index:1}
+.flow li.hot .n{background:var(--coral);border-color:var(--coral);color:#fff}
+.flow h4{font:600 15px/1.25 var(--f-body);margin-top:12px}
+.flow p{font-size:13px;color:var(--muted);margin-top:4px}
+.flow ol{margin:0;padding:0;display:flex;min-width:1100px}
+
+.challenge{background:var(--hero);color:var(--hero-ink);border-radius:22px;padding:clamp(28px,4vw,48px);display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:36px;align-items:center;margin-top:28px}
+.challenge h3{font-size:clamp(28px,3.4vw,44px);font-weight:800}
+.challenge h3 em{font-style:normal;color:var(--tape)}
+.challenge ul{margin:0;padding:0;list-style:none;display:grid;gap:12px}
+.challenge li{display:flex;gap:12px;color:var(--hero-muted);font-size:15.5px}
+.challenge li::before{content:"";flex:none;width:18px;height:2px;margin-top:12px;background:var(--tape)}
+
+/* solução: 6 componentes */
+.pieces{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.piece{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:24px;transition:transform .3s, border-color .3s;overflow:hidden;min-width:0}
+.piece:hover{transform:translateY(-4px);border-color:var(--tape)}
+.piece .ico{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;background:var(--surface-2);margin-bottom:18px;color:var(--blue)}
+.piece .ico svg{width:26px;height:26px}
+.piece .nn{position:absolute;top:20px;right:22px;font:500 12px/1 var(--f-mono);color:var(--muted)}
+.piece h3{font-size:20px;font-weight:600;margin-bottom:8px}
+.piece p{color:var(--muted);font-size:15px}
+.human{margin-top:22px;display:flex;gap:16px;align-items:center;padding:20px 24px;border-radius:16px;background:color-mix(in srgb,var(--mint) 12%,var(--surface));border:1.5px solid color-mix(in srgb,var(--mint) 50%,transparent)}
+.human svg{flex:none;color:var(--mint)}
+.human p{font-size:16px}
+
+/* demo */
+.demo{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:22px;align-items:start}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:24px;min-width:0}
+.panel h3{font-size:20px;font-weight:600;display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:16px}
+form .f{display:grid;gap:6px;margin-bottom:12px}
+form .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+label{font:600 13px/1 var(--f-body);color:var(--muted)}
+input,select,textarea{font:500 15px/1.3 var(--f-body);padding:12px 13px;border-radius:10px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);width:100%;min-width:0}
+input:focus,select:focus,textarea:focus{border-color:var(--blue);outline:none;box-shadow:0 0 0 3px color-mix(in srgb,var(--blue) 22%,transparent)}
+textarea{resize:vertical;min-height:62px}
+.phone{margin-top:18px;background:#0B141A;border-radius:18px;padding:14px;color:#E9EDEF}
+.phone .bar{display:flex;align-items:center;gap:10px;font:600 13px/1 var(--f-body);padding-bottom:12px;border-bottom:1px solid #22303a;margin-bottom:12px}
+.phone .bar i{width:28px;height:28px;border-radius:50%;background:var(--tape);display:grid;place-items:center;color:#1F1600;font-style:normal;font-weight:800;font-size:12px}
+.phone .bar small{display:block;font:400 11px/1.4 var(--f-body);color:#8696A0}
+.bubble{background:#005C4B;border-radius:12px 12px 4px 12px;padding:10px 12px;font-size:14px;line-height:1.45;margin-left:auto;max-width:92%;white-space:pre-line}
+.bubble time{display:block;text-align:right;font-size:10.5px;color:#9DD3C5;margin-top:4px}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:16px}
+.kpis div{background:var(--surface-2);border-radius:12px;padding:12px}
+.kpis b{display:block;font:800 26px/1 var(--f-display);letter-spacing:-.02em}
+.kpis span{font:500 11px/1.2 var(--f-mono);color:var(--muted)}
+.board{overflow-x:auto;padding-bottom:6px}
+.cols{display:grid;grid-template-columns:repeat(5,minmax(150px,1fr));gap:10px;min-width:780px}
+.col{background:var(--surface-2);border-radius:14px;padding:10px;min-height:280px}
+.col h4{font:600 12px/1 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between;margin:4px 4px 10px}
+.col h4 i{font-style:normal;background:var(--surface);border-radius:99px;padding:3px 7px}
+.oc{background:var(--surface);border-radius:10px;padding:10px;margin-bottom:8px;border-left:4px solid var(--c,var(--blue));font-size:13px;animation:pop .4s cubic-bezier(.2,.9,.3,1.3)}
+.oc b{display:block;font-size:13.5px;line-height:1.25}
+.oc small{display:block;color:var(--muted);margin:4px 0 8px;font-size:12px}
+.oc .ex{font:500 9.5px/1 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.oc button{font:600 11.5px/1 var(--f-body);border:0;background:var(--ink);color:var(--bg);padding:7px 9px;border-radius:7px;cursor:pointer;width:100%}
+.oc.done button{display:none}
+.oc.new{box-shadow:0 0 0 2px var(--tape)}
+@keyframes pop{from{transform:scale(.85);opacity:.3}to{transform:none;opacity:1}}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,140%);background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:99px;font:600 14px/1 var(--f-body);transition:transform .35s cubic-bezier(.2,.9,.3,1.2);z-index:80;box-shadow:var(--shadow)}
+.toast.show{transform:translate(-50%,0)}
+
+/* benefícios */
+.ben{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
+.ben .card{padding:22px}
+.ben .card .big{font:800 15px/1 var(--f-mono);color:var(--blue);letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px;display:block}
+.types{display:flex;flex-wrap:wrap;gap:14px;margin-top:22px}
+.type{flex:1 1 240px;border-radius:16px;padding:22px;background:var(--surface);border:1px solid var(--line)}
+.type b{font:700 20px/1.1 var(--f-display);display:block;margin-bottom:6px}
+.type p{font-size:14.5px;color:var(--muted)}
+.type:nth-child(1) b{color:var(--blue)} .type:nth-child(2) b{color:var(--coral)} .type:nth-child(3) b{color:var(--mint)}
+
+/* gantt */
+.gantt{overflow-x:auto}
+.gt{min-width:760px;display:grid;grid-template-columns:240px repeat(9,1fr);border:1px solid var(--line);border-radius:16px;background:var(--surface);overflow:hidden}
+.gt > div{padding:12px 10px;border-bottom:1px solid var(--line);font-size:14px;min-height:50px;display:flex;align-items:center}
+.gt .hd{font:500 11px/1 var(--f-mono);color:var(--muted);letter-spacing:.06em;text-transform:uppercase;background:var(--surface-2);justify-content:center}
+.gt .hd:first-child{justify-content:flex-start}
+.gt .nm{font-weight:600;gap:10px}
+.gt .nm small{font:400 12px/1.2 var(--f-body);color:var(--muted);display:block}
+.gt .bar{grid-column:var(--s)/var(--e);margin:9px 4px;border-radius:8px;background:var(--c);color:#fff;font:600 12px/1 var(--f-mono);padding:0 10px;transform-origin:left;min-height:32px}
+.gt .lane{display:contents}
+.gt .pilot{background-image:repeating-linear-gradient(135deg,rgba(255,255,255,.18) 0 8px,transparent 8px 16px)}
+
+/* 5W2H */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:16px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:860px;font-size:14px}
+th,td{text-align:left;padding:13px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:500 11px/1.2 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:var(--surface-2)}
+th em{font-style:normal;display:block;color:var(--blue);font-size:10px;margin-top:3px}
+tr:last-child td{border-bottom:0}
+td.money{font-family:var(--f-mono);white-space:nowrap}
+tbody tr{transition:background .2s}
+tbody tr:hover{background:color-mix(in srgb,var(--tape) 10%,transparent)}
+
+/* riscos */
+.risks{display:grid;gap:10px}
+.risk{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1.3fr);gap:18px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;font-size:14.5px}
+.risk > div{min-width:0}
+.risk b{font-weight:600}
+.risk .im{color:var(--coral)}
+.risk .mi{color:var(--ink)}
+.risk .mi::before{content:"✓ ";color:var(--mint);font-weight:700}
+.risk-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1.3fr);gap:18px;padding:0 18px;font:500 11px/1 var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+
+/* KPIs */
+.kgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.kpi .ring{width:112px;height:112px}
+.kpi .ring b{font-size:24px}
+.kpi h4{font:600 16px/1.25 var(--f-body)}
+.kpi p{font-size:13px;color:var(--muted)}
+.kpi .when{font:500 11px/1 var(--f-mono);color:var(--blue);letter-spacing:.04em}
+.notice{display:flex;gap:12px;align-items:flex-start;padding:16px 18px;border-radius:14px;background:color-mix(in srgb,var(--tape) 16%,var(--surface));border:1px solid color-mix(in srgb,var(--tape) 60%,transparent);font-size:14.5px;margin-top:18px}
+.notice b{font-weight:700}
+
+/* equipe / encerramento */
+.team{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.mem{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px;position:relative;overflow:hidden;min-width:0}
+.mem .av{width:58px;height:58px;border-radius:16px;display:grid;place-items:center;font:800 22px/1 var(--f-display);color:#fff;background:var(--c);margin-bottom:16px;transform:rotate(-4deg)}
+.mem h3{font-size:21px;font-weight:600}
+.mem .role{font:500 12px/1.3 var(--f-mono);color:var(--muted);margin:6px 0 12px;letter-spacing:.03em}
+.mem ul{margin:0;padding-left:18px;font-size:14px;color:var(--muted);display:grid;gap:4px}
+.mem .min{position:absolute;top:22px;right:20px;font:800 30px/1 var(--f-display);color:var(--c);letter-spacing:-.04em}
+.mem .min small{font:500 11px var(--f-mono);margin-left:2px}
+.qs{counter-reset:q;display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.qs li{counter-increment:q;display:flex;gap:14px;align-items:baseline;font:500 17px/1.4 var(--f-body);padding:14px 0;border-bottom:1px dashed var(--line)}
+.qs li::before{content:"P" counter(q);font:500 12px/1 var(--f-mono);color:var(--tape-ink);background:var(--tape);padding:5px 7px;border-radius:4px;flex:none}
+.final{background:var(--hero);color:var(--hero-ink);margin-top:80px;position:relative;overflow:hidden}
+.final .wrap{padding-block:90px 40px}
+.final blockquote{margin:0;font:600 clamp(26px,3.6vw,46px)/1.15 var(--f-display);letter-spacing:-.025em;max-width:24ch}
+.final blockquote em{font-style:normal;color:var(--tape)}
+.final .cols2{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:30px;margin-top:60px;padding-top:30px;border-top:1px solid rgba(255,255,255,.14);font-size:14px;color:var(--hero-muted)}
+.final h4{font:500 11px/1 var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--tape);margin-bottom:12px}
+.final a{color:var(--hero-ink)}
+.final ol{margin:0;padding-left:18px;display:grid;gap:6px}
+.copy{display:inline-flex;gap:8px;align-items:center;margin-top:6px}
+.copy code{font:500 14px var(--f-mono);color:var(--hero-ink);user-select:all}
+.copy button{font:600 12px/1 var(--f-body);background:rgba(255,255,255,.1);border:0;color:var(--hero-ink);padding:7px 10px;border-radius:7px;cursor:pointer}
+.foot{padding-block:26px;font:400 12px/1.5 var(--f-mono);color:var(--hero-muted);border-top:1px solid rgba(255,255,255,.08);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+/* responsivo */
+@media (max-width: 1020px){
+  .hero .wrap{grid-template-columns:1fr}
+  .stage{min-height:380px}
+  .products,.pieces{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .ben{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .kgrid,.team{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .demo,.story,.challenge{grid-template-columns:1fr}
+}
+@media (max-width: 720px){
+  body{font-size:16px}
+  .top .wrap{gap:10px}
+  .brand small{display:none}
+  .nav a{padding:9px 8px;font-size:12.5px}
+  .hero .wrap{padding-block:40px 24px}
+  .hero-stats{grid-template-columns:repeat(2,1fr)}
+  .sec-head{grid-template-columns:1fr;gap:16px}
+  section.sec{padding-block:68px 24px}
+  .g2,.g3,.g4,.products,.pieces,.swot,.kgrid,.team,.ben{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr;gap:26px}
+  .steps::before{display:none}
+  .risk,.risk-head{grid-template-columns:1fr;gap:6px}
+  .risk-head{display:none}
+  .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .final .cols2{grid-template-columns:1fr}
+  form .two{grid-template-columns:1fr}
+  .ringrow{flex-direction:column;align-items:flex-start}
+  .stage .label{display:none}
+}
+@media (prefers-reduced-motion: reduce){
+  *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
+</style>
+
+<!-- ============ TOPO ============ -->
+<header class="top" id="top">
+  <div class="wrap">
+    <a class="brand" href="#inicio">Retrô<i>Kids</i> <small>× FAINOR</small></a>
+    <nav class="nav" aria-label="Seções">
+      <a href="#escopo">Escopo</a>
+      <a href="#empresa">A empresa</a>
+      <a href="#diagnostico">Diagnóstico</a>
+      <a href="#solucao">Solução</a>
+      <a href="#demo">Demonstração</a>
+      <a href="#plano">Plano</a>
+      <a href="#indicadores">Indicadores</a>
+      <a href="#equipe">Equipe</a>
+    </nav>
+  </div>
+  <div class="tape" aria-hidden="true">
+    <div class="ticks"></div>
+    <div class="nums" id="tapeNums"></div>
+    <div class="fill" id="tapeFill"></div>
+    <div class="cm" id="tapeCm">0 cm</div>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="inicio">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow"><b>Consultoria</b> Gestão da Inovação · Administração · FAINOR 2026</div>
+      <h1>Medida certa<em>para cada história.</em><span class="thin">Diagnóstico, inovação e devolutiva da Retrô Kids</span></h1>
+      <p class="lead">Quatro estudantes, uma confecção de Vitória da Conquista e uma pergunta: como levar a mesma precisão do corte sob medida para o atendimento, o orçamento e o acompanhamento de cada pedido?</p>
+      <div class="cta">
+        <a class="btn primary" href="#solucao">Conhecer o Pedido Fácil
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="btn ghost" href="#demo">Testar a demonstração</a>
+      </div>
+    </div>
+    <div class="stage" aria-label="Carretel de linha, agulha e botões em 3D. Arraste para girar.">
+      <canvas id="spool"></canvas>
+      <div class="label l1">carretel 3D<br>arraste para girar</div>
+      <div class="label l2">linha · agulha · botões<br>o kit de toda confecção</div>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="hero-stats">
+      <div><strong class="mono" data-count="2007" data-plain="1">2007</strong><span>ano de fundação</span></div>
+      <div><strong><span data-count="19">19</span> anos</strong><span>de confecção própria</span></div>
+      <div><strong><span data-count="6">6</span> linhas</strong><span>de produto sob encomenda</span></div>
+      <div><strong>BR</strong><span>entregas em todo o Brasil</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ESCOPO ============ -->
+<section class="sec" id="escopo">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <div class="eyebrow"><b>01</b> Abertura e escopo</div>
+        <h2 style="margin-top:16px">Uma consultoria em <span>três etapas</span></h2>
+        <div class="who"><span class="av">W</span>Apresenta: Welton Rocha · coordenação</div>
+      </div>
+      <p class="lead">Trabalho da disciplina de Gestão da Inovação, orientado pela professora Letícia Oliveira. Nosso objetivo: apresentar uma solução prática, acessível e adaptável à realidade da Retrô Kids.</p>
+    </div>
+    <div class="steps rv">
+      <div class="step"><div class="dot">1</div><h3>Diagnóstico organizacional</h3><p>Conhecer a empresa, o segmento, os diferenciais e as oportunidades de melhoria.</p></div>
+      <div class="step"><div class="dot">2</div><h3>Plano de ação para inovação</h3><p>Estruturar uma proposta de melhoria dos processos comerciais, com 5W2H, recursos e cronograma.</p></div>
+      <div class="step"><div class="dot">3</div><h3>Devolutiva</h3><p>Apresentar à empresa a solução, os recursos, o cronograma e os resultados esperados.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ EMPRESA ============ -->
+<section class="sec" id="empresa">
+  <div class="wrap">
+    <div class="ruler" aria-hidden="true"></div>
+    <div class="sec-head">
+      <div>
+        <div class="eyebrow"><b>02</b> Quem é a Retrô Kids</div>
+        <h2 style="margin-top:16px">Nasceu de uma mãe e uma <span>fita métrica</span></h2>
+      </div>
+      <p class="lead">Confecção sob medida em Vitória da Conquista (BA), com equipe e produção próprias. Une moda atemporal e estilo infantil, com foco na individualidade de cada cliente.</p>
+    </div>
+
+    <div class="story">
+      <div class="rv">
+        <p class="quote">“Qualidade e autenticidade no dia a dia, com <mark>honestidade, confiança e determinação</mark>.”</p>
+        <p class="src">Valores declarados pela empresa · <a href="https://msha.ke/retrokids/" target="_blank" rel="noopener">msha.ke/retrokids</a></p>
+        <div class="card stitch" style="margin-top:26px">
+          <div class="eyebrow" style="margin-bottom:12px">Público atendido</div>
+          <p style="color:var(--ink)">Famílias que buscam peças personalizadas, escolas, grupos musicais e artísticos, empresas, profissionais de saúde e órgãos públicos.</p>
+          <div class="clients">
+            <span>Colégio Oficina</span><span>Colégio Primeiros Passos</span><span>Escola Novas Ideias</span><span>Cathalá Instituto de Música</span><span>Prefeituras da região</span>
+          </div>
+          <p class="src">Clientes institucionais citados pela própria empresa.</p>
+        </div>
+      </div>
+      <ol class="tl rv">
+        <li><span class="y">2007</span><div><h4>Fundação</h4><p>Uma mãe procura roupas sob medida para a filha bebê. O projeto vira confecção.</p></div></li>
+        <li><span class="y">2007–25</span><div><h4>Produção sob encomenda</h4><p>Uniformes, fardamentos, jalecos, pijamas cirúrgicos e figurinos para musicais e fanfarras.</p></div></li>
+        <li><span class="y">nov 2025</span><div><h4>Portas abertas</h4><p>A empresa abre oficialmente seu espaço físico: um novo momento de expansão e proximidade com o público.</p></div></li>
+        <li><span class="y">2026</span><div><h4>Consultoria FAINOR</h4><p>Diagnóstico, plano de ação e devolutiva do projeto RetroKids Pedido Fácil.</p></div></li>
+      </ol>
+    </div>
+
+    <!-- catálogo -->
+    <div style="margin-top:80px" id="catalogo">
+      <div class="eyebrow" style="margin-bottom:14px"><b>Portfólio</b> o que sai do ateliê</div>
+      <h3 style="font-size:clamp(26px,3vw,38px);margin-bottom:22px">Seis linhas, uma regra: cada peça tem a medida de quem veste.</h3>
+      <div class="cat-tools" role="group" aria-label="Filtrar portfólio">
+        <button class="chip" aria-pressed="true" data-f="all">Tudo</button>
+        <button class="chip" aria-pressed="false" data-f="edu">Educação</button>
+        <button class="chip" aria-pressed="false" data-f="saude">Saúde</button>
+        <button class="chip" aria-pressed="false" data-f="arte">Arte e música</button>
+        <button class="chip" aria-pressed="false" data-f="corp">Empresas e órgãos</button>
+      </div>
+      <div class="products" id="products"></div>
+      <p class="src">Ilustrações representativas. O catálogo real usará fotos e dados autorizados pela empresa.</p>
+    </div>
+
+    <!-- contexto -->
+    <div style="margin-top:80px">
+      <div class="eyebrow" style="margin-bottom:14px"><b>Contexto</b> cidade, setor e canal</div>
+      <div class="grid g3">
+        <div class="card rv">
+          <div class="stat"><strong><span data-count="397">397</span><small>mil</small></strong></div>
+          <h3 style="margin-top:10px">Vitória da Conquista</h3>
+          <p>Terceira maior cidade da Bahia. 370.879 habitantes no Censo 2022; cerca de 396,6 mil na estimativa de 2025.</p>
+          <p class="src">Fonte: <a href="https://www.ibge.gov.br/cidades-e-estados/ba/vitoria-da-conquista.html" target="_blank" rel="noopener">IBGE Cidades</a></p>
+        </div>
+        <div class="card rv">
+          <div class="stat"><strong>R$ <span data-count="215">215</span><small>bi</small></strong></div>
+          <h3 style="margin-top:10px">Setor têxtil e de confecção</h3>
+          <p>Faturamento do setor no Brasil em 2024, cerca de 7% acima de 2023. Mercado grande e disputado, com pressão de preço e prazo.</p>
+          <p class="src">Fonte: Abit, via <a href="https://mercadoeconsumo.com.br/15/01/2025/economia/setor-textil-e-de-confeccao-faturou-7-mais-em-2024-ante-2023-aponta-abit/" target="_blank" rel="noopener">Mercado &amp; Consumo</a></p>
+        </div>
+        <div class="card rv">
+          <div class="ringrow">
+            <div class="ring" data-ring="80" data-color="--mint"><svg viewBox="0 0 160 160"><circle class="bgc" cx="80" cy="80" r="66"/><circle class="fg" cx="80" cy="80" r="66"/></svg><b>80%</b></div>
+            <div><h3>WhatsApp é balcão</h3><p>8 em cada 10 brasileiros usam o WhatsApp para falar com empresas. Em 2025, 30% já fazem compras pelo app.</p></div>
+          </div>
+          <p class="src">Fontes: <a href="https://startupi.com.br/pesquisa-aponta-que-80-dos-brasileiros-utilizam-o-whatsapp-para-se-comunicar-com-as-marcas" target="_blank" rel="noopener">Startupi</a> · CX Trends 2025 (Octadesk/Opinion Box)</p>
+        </div>
+      </div>
+      <div class="card rv" style="margin-top:18px">
+        <div class="sec-head" style="margin-bottom:10px">
+          <h3 style="font-size:24px">Projeções da Abit: o setor cresce devagar</h3>
+          <p style="color:var(--muted);font-size:15px">Com o mercado desacelerando, ganha quem converte melhor cada contato. Esse é o ponto de partida da nossa proposta.</p>
+        </div>
+        <div class="chart-box"><canvas id="cMarket" aria-label="Gráfico de barras: produção 2025 +4,4%, produção 2026 +1,1%, varejo 2026 +0,7%, exportações 2026 +3,3%"></canvas></div>
+        <p class="src">Variação anual (%). Fonte: Abit, via <a href="https://mercadoeconsumo.com.br/22/01/2026/economia/producao-da-industria-textil-brasileira-deve-crescer-11-em-2026-preve-abit/" target="_blank" rel="noopener">Mercado &amp; Consumo, jan. 2026</a>. 2025 é estimativa; 2026 é projeção.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DIAGNÓSTICO ============ -->
+<section class="sec" id="diagnostico">
+  <div class="wrap">
+    <div class="ruler" aria-hidden="true"></div>
+    <div class="sec-head">
+      <div>
+        <div class="eyebrow"><b>03</b> Diagnóstico organizacional</div>
+        <h2 style="margin-top:16px">Forças de sobra. O desafio está <span>no balcão</span>.</h2>
+        <div class="who"><span class="av">A</span>Apresenta: Arthur Rebouças · pesquisa e diagnóstico</div>
+      </div>
+      <p class="lead">Análise SWOT feita a partir das informações públicas da empresa. Os itens internos são hipóteses e precisam ser validados com a gestão. Toque em cada quadrante para abrir.</p>
+    </div>
+
+    <div class="swot" id="swot">
+      <button class="flip" aria-expanded="false" style="--c:#1F8F7C"><div class="in">
+        <div class="f"><span class="k">F</span><h3>Forças</h3><small>Ambiente interno · toque para ver</small></div>
+        <div class="b"><h3>Forças</h3><ul><li>Experiência no mercado desde 2007</li><li>Confecção própria e personalização</li><li>Atendimento sob encomenda</li><li>Clientes individuais e institucionais</li></ul></div>
+      </div></button>
+      <button class="flip" aria-expanded="false" style="--c:#2B4DB8"><div class="in">
+        <div class="f"><span class="k">O</span><h3>Oportunidades</h3><small>Ambiente externo · toque para ver</small></div>
+        <div class="b"><h3>Oportunidades</h3><ul><li>Crescimento da compra e do orçamento por canais digitais</li><li>Redes sociais e WhatsApp para captar clientes</li><li>Entregas para todo o Brasil</li></ul></div>
+      </div></button>
+      <button class="flip" aria-expanded="false" style="--c:#C98A00"><div class="in">
+        <div class="f"><span class="k">F</span><h3>Fragilidades</h3><small>Ambiente interno · toque para ver</small></div>
+        <div class="b"><h3>Fragilidades</h3><ul><li>Possível dependência de processos manuais no orçamento</li><li>Informações de clientes possivelmente dispersas</li><li>Ausência de indicadores formalizados de vendas e atendimento</li></ul><span class="tag warn">Hipóteses a validar</span></div>
+      </div></button>
+      <button class="flip" aria-expanded="false" style="--c:#C4324B"><div class="in">
+        <div class="f"><span class="k">A</span><h3>Ameaças</h3><small>Ambiente externo · toque para ver</small></div>
+        <div class="b"><h3>Ameaças</h3><ul><li>Concorrência de confecções locais e fornecedores digitais</li><li>Pressão por preços e prazos mais curtos</li><li>Setor de vestuário em desaceleração</li></ul></div>
+      </div></button>
+    </div>
+
+    <div style="margin-top:60px">
+      <div class="eyebrow" style="margin-bottom:14px"><b>Processo</b> do primeiro contato à entrega</div>
+      <h3 style="font-size:clamp(24px,2.6vw,32px);margin-bottom:20px;max-width:30ch">Em produto sob encomenda, um dado errado no início vira retrabalho no fim.</h3>
+      <div class="flow" tabindex="0" aria-label="Etapas do processo atual, role na horizontal">
+        <ol>
+          <li class="hot"><div class="n">01</div><h4>Captação</h4><p>Contato por WhatsApp, Instagram ou loja</p></li>
+          <li class="hot"><div class="n">02</div><h4>Necessidades e medidas</h4><p>Ponto crítico: dados incompletos</p></li>
+          <li><div class="n">03</div><h4>Modelo e material</h4><p>Tecido, cor, personalização</p></li>
+          <li class="hot"><div class="n">04</div><h4>Orçamento</h4><p>Possível etapa manual</p></li>
+          <li><div class="n">05</div><h4>Aprovação</h4><p>Cliente confirma</p></li>
+          <li><div class="n">06</div><h4>Produção</h4><p>Corte e costura próprios</p></li>
+          <li><div class="n">07</div><h4>Conferência</h4><p>Qualidade e quantidade</p></li>
+          <li class="hot"><div class="n">08</div><h4>Entrega</h4><p>Cliente sem visibilidade do status</p></li>
+        </ol>
+      </div>
+      <p class="src"><span style="color:var(--coral)">■</span> Etapas onde o diagnóstico vê maior risco de perda de informação (a validar).</p>
+    </div>
+
+    <div class="challenge rv">
+      <div>
+        <div class="eyebrow" style="color:var(--hero-muted);margin-bottom:14px"><b>Problema central</b></div>
+        <h3>Tornar o processo comercial mais <em>organizado, ágil e mensurável.</em></h3>
+      </div>
+      <ul>
+        <li>Organizar e acelerar o processo comercial digital, do primeiro contato ao fechamento.</li>
+        <li>Reduzir a dependência de processos manuais e de informações dispersas.</li>
+        <li>Acompanhar conversão, tempo de resposta, recompra e satisfação.</li>
+        <li>Ampliar o alcance geográfico sem perder qualidade.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SOLUÇÃO ============ -->
+<section class="sec" id="solucao">
+  <div class="wrap">
+    <div class="ruler" aria-hidden="true"></div>
+    <div class="sec-head">
+      <div>
+        <div class="eyebrow"><b>04</b> Proposta de inovação</div>
+        <h2 style="margin-top:16px">RetroKids <span>Pedido Fácil</span></h2>
+        <div class="who"><span class="av">AJ</span>Apresenta: Adiran Júnior · a solução</div>
+      </div>
+      <p class="lead">Um fluxo digital que integra atendimento, organização e gestão. Seis peças simples, de baixo custo, costuradas num só processo.</p>
+    </div>
+    <div class="pieces" id="pieces"></div>
+    <div class="human rv">
+      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+      <p><b>O atendimento continua humano.</b> A tecnologia cuida do registro e do acompanhamento para que a equipe tenha mais tempo para o relacionamento com o cliente.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DEMO ============ -->
+<section class="sec" id="demo">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <div class="eyebrow"><b>05</b> Demonstração interativa</div>
+        <h2 style="margin-top:16px">Do formulário ao <span>quadro de pedidos</span></h2>
+      </div>
+      <p class="lead">Preencha o formulário de orçamento. A mensagem de WhatsApp se monta sozinha, o pedido entra no controle e os indicadores se atualizam. Os pedidos já listados são exemplos fictícios.</p>
+    </div>
+    <div class="demo">
+      <div class="panel">
+        <h3>Formulário de orçamento <span class="tag">Apêndice A</span></h3>
+        <form id="orderForm" autocomplete="off">
+          <div class="f"><label for="fCliente">Cliente ou instituição</label><input id="fCliente" required value="Escola Sol Nascente (exemplo)"></div>
+          <div class="two">
+            <div class="f"><label for="fProduto">Produto</label>
+              <select id="fProduto">
+                <option>Uniforme escolar</option><option>Fardamento</option><option>Jaleco</option><option>Pijama cirúrgico</option><option>Figurino de fanfarra</option><option>Peça exclusiva</option>
+              </select></div>
+            <div class="f"><label for="fQtd">Quantidade</label><input id="fQtd" type="number" min="1" value="80" required></div>
+          </div>
+          <div class="two">
+            <div class="f"><label for="fTam">Tamanhos</label><input id="fTam" value="4 ao 14"></div>
+            <div class="f"><label for="fPrazo">Prazo desejado</label><input id="fPrazo" type="date"></div>
+          </div>
+          <div class="f"><label for="fPers">Personalização</label><textarea id="fPers">Bordado do brasão no peito, cor azul-marinho</textarea></div>
+          <button class="btn primary" type="submit" style="width:100%;justify-content:center">Registrar orçamento</button>
+        </form>
+        <div class="phone" aria-live="polite">
+          <div class="bar"><i>RK</i><div>Retrô Kids<small>WhatsApp Business · resposta rápida</small></div></div>
+          <div class="bubble" id="waMsg"></div>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>Controle de pedidos <span class="tag">Apêndice B</span></h3>
+        <div class="kpis">
+          <div><b id="kTot">0</b><span>orçamentos registrados</span></div>
+          <div><b id="kOpen">0</b><span>em aberto</span></div>
+          <div><b id="kConv">0%</b><span>conversão</span></div>
+          <div><b>100%</b><span>na base única</span></div>
+        </div>
+        <div class="board" tabindex="0" aria-label="Quadro de pedidos, role na horizontal"><div class="cols" id="cols"></div></div>
+        <p class="src">Etapas detalhadas no relatório: recebido, aguardando informações, orçamento em elaboração, enviado, aprovado, em produção, pronto para entrega, concluído.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ JUSTIFICATIVA ============ -->
+<section class="sec" id="beneficios">
+  <div class="wrap">
+    <div class="ruler" aria-hidden="true"></div>
+    <div class="sec-head">
+      <div>
+        <div class="eyebrow"><b>06</b> Justificativa e benefícios</div>
+        <h2 style="margin-top:16px">Por que <span>essa</span> proposta</h2>
+        <div class="who"><span class="av">I</span>Apresenta: Igor Meira · justificativa e implementação</div>
+      </div>
+      <p class="lead">Produto personalizado exige informação correta, comunicação eficiente e acompanhamento. A proposta começa com ferramentas gratuitas ou baratas e cresce conforme a necessidade.</p>
+    </div>
+    <div class="ben">
+      <div class="card rv"><span class="big">Atendimento</span><p>Menos tempo de resposta e comunicação mais fácil com o cliente.</p></div>
+      <div class="card rv"><span class="big">Organização</span><p>Informações centralizadas e menor risco de perder dados.</p></div>
+      <div class="card rv"><span class="big">Comercial</span><p>Orçamentos e oportunidades acompanhados até o fechamento.</p></div>
+      <div class="card rv"><span class="big">Gestão</span><p>Indicadores para entender resultados e decidir com dados.</p></div>
+      <div class="card rv"><span class="big">Alcance</span><p>Processo pronto para atender clientes de outras cidades.</p></div>
+    </div>
+    <div class="types">
+      <div class="type rv"><b>Inovação de processo</b><p>Reorganiza o fluxo de orçamento, venda e acompanhamento.</p></div>
+      <div class="type rv"><b>Inovação de marketing</b><p>Cria uma jornada digital estruturada de captação e relacionamento.</p></div>
+      <div class="type rv"><b>Inovação organizacional</b><p>Introduz procedimentos, responsáveis e indicadores de gestão.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PLANO ============ -->
+<section class="sec" id="plano">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <div class="eyebrow"><b>07</b> Plano de implementação</div>
+        <h2 style="margin-top:16px">Nove semanas, <span>um piloto</span>, zero pressa</h2>
+        <div class="who"><span class="av">W</span><span class="av" style="margin-left:-20px;background:var(--coral);color:#fff">I</span>Welton Rocha e Igor Meira</div>
+      </div>
+      <p class="lead">Começa pelos uniformes e fardamentos, categoria com potencial de recorrência institucional. Testar em pequena escala antes de ampliar para o resto do portfólio.</p>
+    </div>
+
+    <div class="gantt" tabindex="0" aria-label="Cronograma de 9 semanas, role na horizontal">
+      <div class="gt" id="gantt"></div>
+    </div>
+
+    <div class="grid g2" style="margin-top:22px">
+      <div class="card rv">
+        <div class="eyebrow" style="margin-bottom:12px"><b>Investimento</b></div>
+        <div class="stat"><strong>R$ 0 – 2.500</strong></div>
+        <p style="margin-top:8px">Estimativa preliminar para configuração, catálogo, treinamento e eventual ferramenta. A recomendação é começar com o que a empresa já tem.</p>
+        <div class="chart-box" style="height:280px;margin-top:16px"><canvas id="cCost" aria-label="Faixa de custo por atividade"></canvas></div>
+        <p class="src">Faixa de custo por atividade (R$). Valores mensais e alternativos não devem ser somados sem cotação.</p>
+      </div>
+      <div class="card rv">
+        <div class="eyebrow" style="margin-bottom:12px"><b>Governança</b></div>
+        <h3>Quem faz o quê</h3>
+        <ul style="margin:10px 0 0;padding-left:18px;color:var(--muted);display:grid;gap:10px;font-size:15.5px">
+          <li><b style="color:var(--ink)">Gestor responsável:</b> valida o fluxo, acompanha o cronograma e analisa os indicadores.</li>
+          <li><b style="color:var(--ink)">Comercial e atendimento:</b> recebe contatos, registra dados, prepara orçamentos e atualiza os status.</li>
+          <li><b style="color:var(--ink)">Produção:</b> valida especificações, capacidade e prazos.</li>
+          <li><b style="color:var(--ink)">Reunião semanal curta</b> durante o piloto para revisar pendências e ajustar.</li>
+        </ul>
+        <div class="notice"><span>⚑</span><p><b>Critérios para ampliar:</b> equipe mantém os registros, formulário basta para orçar, status refletem o processo real, indicadores têm dados confiáveis e a gestão considera o processo sustentável.</p></div>
+      </div>
+    </div>
+
+    <div style="margin-top:40px">
+      <div class="eyebrow" style="margin-bottom:14px"><b>5W2H</b> plano de ação</div>
+      <div class="tbl" tabindex="0" aria-label="Tabela 5W2H, role na horizontal">
+        <table>
+          <thead><tr><th>O quê<em>What</em></th><th>Por quê<em>Why</em></th><th>Como<em>How</em></th><th>Quem<em>Who</em></th><th>Quando<em>When</em></th><th>Onde<em>Where</em></th><th>Quanto<em>How much</em></th></tr></thead>
+          <tbody>
+            <tr><td><b>Mapear o atendimento atual</b></td><td>Localizar pontos de espera ou perda de informação</td><td>Entrevistas breves, observação e fluxograma</td><td>Gestor + comercial</td><td>Sem. 1</td><td>Atendimento</td><td class="money">R$ 0–300</td></tr>
+            <tr><td><b>Criar catálogo e formulário</b></td><td>Padronizar apresentação e coleta de dados</td><td>Campos, categorias e fotos autorizadas</td><td>Comercial + marketing</td><td>Sem. 2–3</td><td>Digital</td><td class="money">R$ 0–500</td></tr>
+            <tr><td><b>Organizar planilha ou CRM</b></td><td>Centralizar clientes, orçamentos e etapas</td><td>Campos, responsáveis, status e rotina</td><td>Comercial</td><td>Sem. 3</td><td>Digital</td><td class="money">R$ 0–200/mês</td></tr>
+            <tr><td><b>Configurar WhatsApp Business</b></td><td>Agilizar e organizar conversas</td><td>Perfil, etiquetas e respostas rápidas</td><td>Atendimento</td><td>Sem. 3–4</td><td>WhatsApp</td><td class="money">R$ 0–300</td></tr>
+            <tr><td><b>Treinar a equipe</b></td><td>Garantir uso consistente</td><td>Treino prático com simulações</td><td>Gestor</td><td>Sem. 4</td><td>Empresa</td><td class="money">R$ 0–500</td></tr>
+            <tr><td><b>Executar o piloto</b></td><td>Testar em pedidos reais e ajustar</td><td>Uma categoria, registro de ocorrências</td><td>Comercial + produção</td><td>Sem. 5–8</td><td>Atendimento e produção</td><td class="money">R$ 0–500/mês</td></tr>
+            <tr><td><b>Avaliar e ajustar</b></td><td>Decidir sobre a expansão</td><td>Comparar indicadores com a linha de base</td><td>Gestor + comercial</td><td>Sem. 9 e mensal</td><td>Gestão</td><td class="money">custo interno</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RISCOS + KPIs ============ -->
+<section class="sec" id="indicadores">
+  <div class="wrap">
+    <div class="ruler" aria-hidden="true"></div>
+    <div class="sec-head">
+      <div>
+        <div class="eyebrow"><b>08</b> Riscos e indicadores</div>
+        <h2 style="margin-top:16px">O que pode dar errado, e <span>como medir</span> o que der certo</h2>
+        <div class="who"><span class="av">A</span>Apresenta: Arthur Rebouças</div>
+      </div>
+      <p class="lead">Toda inovação encontra resistência. Para cada risco, uma medida preventiva. Para cada objetivo, um número que mostra se a solução funciona.</p>
+    </div>
+
+    <div class="risk-head"><span>Risco possível</span><span>Impacto</span><span>Medida preventiva</span></div>
+    <div class="risks" style="margin-top:10px">
+      <div class="risk rv"><div><b>Resistência ou baixa adesão da equipe</b></div><div class="im">Registros incompletos e volta ao processo antigo</div><div class="mi">Envolver a equipe no desenho do fluxo e fazer treinamentos práticos</div></div>
+      <div class="risk rv"><div><b>Informações incompletas nos pedidos</b></div><div class="im">Orçamentos imprecisos e retrabalho</div><div class="mi">Formulário padronizado e conferência antes do envio</div></div>
+      <div class="risk rv"><div><b>Controle comercial desatualizado</b></div><div class="im">Perda de visibilidade das oportunidades</div><div class="mi">Responsável definido e rotina diária de atualização</div></div>
+      <div class="risk rv"><div><b>Excesso de mensagens automáticas</b></div><div class="im">Atendimento impessoal</div><div class="mi">Modelos como apoio, sempre com revisão humana</div></div>
+      <div class="risk rv"><div><b>Exposição de dados de clientes</b></div><div class="im">Risco à privacidade e à confiança</div><div class="mi">Acesso restrito e coleta apenas do necessário</div></div>
+      <div class="risk rv"><div><b>Custos acima do previsto</b></div><div class="im">Dificuldade de continuidade</div><div class="mi">Priorizar ferramentas gratuitas e cotar antes de contratar</div></div>
+      <div class="risk rv"><div><b>Pedidos acima da capacidade</b></div><div class="im">Atrasos e insatisfação</div><div class="mi">Validar prazo com a produção antes de confirmar</div></div>
+    </div>
+
+    <div style="margin-top:60px">
+      <div class="eyebrow" style="margin-bottom:14px"><b>KPIs</b> metas projetadas</div>
+      <div class="kgrid" id="kpis"></div>
+      <div class="card rv" style="margin-top:18px">
+        <div class="sec-head" style="margin-bottom:10px">
+          <h3 style="font-size:24px">Linha de base × meta</h3>
+          <p style="color:var(--muted);font-size:15px">Índice com a situação atual igual a 100. Para tempo de resposta e retrabalho, menor é melhor.</p>
+        </div>
+        <div class="chart-box"><canvas id="cKpi" aria-label="Gráfico linha de base versus meta por indicador"></canvas></div>
+      </div>
+      <div class="notice"><span>⚑</span><p><b>Metas projetadas, não resultados.</b> Antes do piloto, a empresa mede a situação atual por pelo menos duas semanas. As metas são ajustadas a essa linha de base.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ EQUIPE + VALIDAÇÃO ============ -->
+<section class="sec" id="equipe">
+  <div class="wrap">
+    <div class="ruler" aria-hidden="true"></div>
+    <div class="sec-head">
+      <div>
+        <div class="eyebrow"><b>09</b> Equipe e validação</div>
+        <h2 style="margin-top:16px">Quatro alunos, <span>40 minutos</span> de devolutiva</h2>
+      </div>
+      <p class="lead">Depois da apresentação, a palavra é da Retrô Kids. Queremos saber se a proposta conversa com as necessidades reais da empresa.</p>
+    </div>
+    <div class="team" id="team"></div>
+
+    <div class="grid g2" style="margin-top:40px;align-items:start">
+      <div class="card rv">
+        <h3>Tempo de fala</h3>
+        <div class="chart-box" style="height:260px"><canvas id="cTime" aria-label="Distribuição do tempo de apresentação por integrante"></canvas></div>
+      </div>
+      <div class="rv">
+        <div class="eyebrow" style="margin-bottom:10px"><b>Perguntas</b> para a gestão</div>
+        <ol class="qs">
+          <li>Atualmente, como são realizados os orçamentos?</li>
+          <li>Qual é a maior dificuldade no acompanhamento dos pedidos?</li>
+          <li>A empresa já utiliza alguma ferramenta para organizar clientes e pedidos?</li>
+          <li>Qual etapa da proposta seria mais interessante implementar primeiro?</li>
+          <li>Existe alguma sugestão de melhoria para a solução apresentada?</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FINAL ============ -->
+<footer class="final">
+  <div class="wrap">
+    <div class="eyebrow" style="color:var(--hero-muted);margin-bottom:22px"><b>Mensagem final</b></div>
+    <blockquote>Transformar uma oportunidade do diagnóstico em uma proposta prática, <em>respeitando a realidade da Retrô Kids.</em></blockquote>
+    <div class="cols2">
+      <div>
+        <h4>Retrô Kids</h4>
+        <p>Vitória da Conquista · Bahia<br>Instagram: <a href="https://www.instagram.com/atelierretrokids" target="_blank" rel="noopener">@atelierretrokids</a></p>
+        <div class="copy"><code id="wa">(77) 98864-1092</code><button type="button" id="copyWa">Copiar</button></div>
+        <p style="margin-top:6px"><a href="https://wa.me/5577988641092" target="_blank" rel="noopener">Abrir no WhatsApp</a></p>
+      </div>
+      <div>
+        <h4>Entregáveis</h4>
+        <ol>
+          <li>Registro das considerações da empresa</li>
+          <li>Ajustes na proposta</li>
+          <li>Relatório final e documentos</li>
+          <li>Termo de entrega e recebimento</li>
+        </ol>
+      </div>
+      <div>
+        <h4>Fontes</h4>
+        <ol>
+          <li><a href="https://msha.ke/retrokids/" target="_blank" rel="noopener">Retrô Kids, página de links</a></li>
+          <li><a href="https://www.ibge.gov.br/cidades-e-estados/ba/vitoria-da-conquista.html" target="_blank" rel="noopener">IBGE Cidades</a></li>
+          <li>Abit, dados do setor (via Mercado &amp; Consumo)</li>
+          <li>CX Trends 2025, Octadesk/Opinion Box</li>
+          <li>Relatório final da consultoria, 2026</li>
+        </ol>
+      </div>
+    </div>
+    <div class="foot"><span>FAINOR · Administração · Gestão da Inovação · Orientação: Letícia Oliveira</span><span>Site acadêmico informativo, sem fins comerciais · Vitória da Conquista, 2026</span></div>
+  </div>
+</footer>
+<div class="toast" id="toast" role="status"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
+<script>
+(function(){
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $ = (s,el=document)=>el.querySelector(s), $$=(s,el=document)=>[...el.querySelectorAll(s)];
+const tok = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+/* ---------- fita métrica / progresso ---------- */
+const nums=$('#tapeNums'); let h='';for(let i=0;i<80;i++)h+='<span>'+i+'</span>';nums.innerHTML=h;
+const fill=$('#tapeFill'), cm=$('#tapeCm');
+const links=$$('.nav a'); const secs=links.map(a=>$(a.getAttribute('href')));
+function onScroll(){
+  const max=document.documentElement.scrollHeight-innerHeight; const p=max>0?scrollY/max:0;
+  fill.style.width=(p*100)+'%'; cm.textContent=Math.round(p*150)+' cm';
+  let cur=-1; secs.forEach((s,i)=>{ if(s && s.getBoundingClientRect().top<innerHeight*.35) cur=i; });
+  links.forEach((a,i)=>a.classList.toggle('on',i===cur));
+}
+addEventListener('scroll',onScroll,{passive:true}); onScroll();
+
+/* ---------- revelar ao entrar (conteúdo visível em repouso) ---------- */
+const seen=new WeakSet();
+const io=new IntersectionObserver(es=>es.forEach(e=>{
+  if(!e.isIntersecting||seen.has(e.target))return; seen.add(e.target);
+  const t=e.target;
+  if(!RM && t.classList.contains('rv')) t.animate([{transform:'translateY(26px)',opacity:.25},{transform:'none',opacity:1}],{duration:800,easing:'cubic-bezier(.2,.8,.2,1)'});
+  if(t.dataset.count) countUp(t);
+  if(t.dataset.ring) ring(t);
+  if(t.dataset.chart) makeChart(t.dataset.chart);
+  if(t.matches('.gt .bar') && !RM) t.animate([{transform:'scaleX(0)'},{transform:'scaleX(1)'}],{duration:900,delay:(+t.dataset.i||0)*90,easing:'cubic-bezier(.2,.8,.2,1)',fill:'backwards'});
+}),{threshold:.18});
+function countUp(el){
+  const end=+el.dataset.count; if(RM)return; const plain=el.dataset.plain; const t0=performance.now(), d=1400;
+  const from=plain?end-19:0;
+  (function f(t){const k=Math.min(1,(t-t0)/d), e=1-Math.pow(1-k,3); el.textContent=Math.round(from+(end-from)*e).toLocaleString('pt-BR',{useGrouping:!plain}); if(k<1)requestAnimationFrame(f)})(t0);
+}
+function ring(el){
+  const c=el.querySelector('.fg'), r=66, L=2*Math.PI*r; const v=+el.dataset.ring;
+  c.style.stroke=tok(el.dataset.color||'--blue'); c.style.strokeDasharray=L;
+  c.style.strokeDashoffset=L; requestAnimationFrame(()=>requestAnimationFrame(()=>c.style.strokeDashoffset=L*(1-v/100)));
+}
+
+/* ---------- produtos ---------- */
+const garments={
+ tee:(c,d)=>`<svg viewBox="0 0 200 180"><path d="M62 18 L30 32 L8 70 L36 84 L46 66 L46 168 L154 168 L154 66 L164 84 L192 70 L170 32 L138 18 Q100 44 62 18Z" fill="${c}"/><path d="M62 18 Q100 44 138 18" fill="none" stroke="rgba(0,0,0,.25)" stroke-width="5"/>${d||''}</svg>`,
+ coat:(c,d)=>`<svg viewBox="0 0 200 180"><path d="M66 12 L34 26 L12 120 L40 126 L50 72 L48 172 L152 172 L150 72 L160 126 L188 120 L166 26 L134 12 L100 64Z" fill="${c}"/><path d="M66 12 L100 64 L134 12" fill="none" stroke="rgba(0,0,0,.2)" stroke-width="4"/><path d="M100 64 V172" stroke="rgba(0,0,0,.2)" stroke-width="3"/>${d||''}</svg>`
+};
+const btns=(x,col,n=4,gap=22,y0=86)=>Array.from({length:n},(_,i)=>`<circle cx="${x}" cy="${y0+i*gap}" r="4.5" fill="${col}"/>`).join('');
+const products=[
+ {k:'edu',n:'Uniformes escolares',d:'Polo, camiseta, bermuda e agasalho com o brasão da escola. Grade infantil completa.',c:'#2B4DB8',m:'grade 2 ao 16',svg:garments.tee('#2B4DB8',`<path d="M84 22 L100 40 L116 22" fill="#F5B700"/><rect x="118" y="70" width="18" height="20" rx="4" fill="#F5B700"/>`)},
+ {k:'corp',n:'Fardamentos',d:'Uniformes de equipe para empresas, comércio e prefeituras, em volume.',c:'#1F8F7C',m:'pedido em lote',svg:garments.tee('#1F8F7C',`<rect x="46" y="120" width="108" height="10" fill="rgba(255,255,255,.55)"/><rect x="62" y="66" width="30" height="8" rx="2" fill="#fff"/>`)},
+ {k:'saude',n:'Jalecos',d:'Corte sob medida, bolsos funcionais e bordado com nome e especialidade.',c:'#8EA3C8',m:'bordado de nome',svg:garments.coat('#F4F6FB',btns(108,'#8EA3C8',4)+`<rect x="62" y="110" width="26" height="22" rx="3" fill="none" stroke="#8EA3C8" stroke-width="3"/><text x="118" y="56" font-size="10" fill="#2B4DB8" font-family="monospace">Dra.</text>`)},
+ {k:'saude',n:'Pijamas cirúrgicos',d:'Conjuntos leves e resistentes para clínicas e hospitais, em várias cores.',c:'#4CC9B0',m:'tecido técnico',svg:garments.tee('#3BB3A0',`<path d="M82 20 L100 50 L118 20" fill="none" stroke="rgba(0,0,0,.25)" stroke-width="5"/><rect x="60" y="78" width="26" height="24" rx="3" fill="rgba(255,255,255,.3)"/>`)},
+ {k:'arte',n:'Musicais e fanfarras',d:'Figurinos com galões, dragonas e botões dourados para bandas e apresentações.',c:'#C4324B',m:'galões e dragonas',svg:garments.coat('#C4324B',btns(88,'#F5B700',4)+btns(112,'#F5B700',4)+`<rect x="30" y="24" width="38" height="10" rx="4" fill="#F5B700" transform="rotate(-22 49 29)"/><rect x="132" y="24" width="38" height="10" rx="4" fill="#F5B700" transform="rotate(22 151 29)"/><path d="M60 90 Q100 110 140 90" stroke="#F5B700" stroke-width="3" fill="none"/>`)},
+ {k:'edu',n:'Peças exclusivas',d:'A origem da marca: roupa infantil sob medida, pensada para uma única história.',c:'#E0475F',m:'feito sob medida',svg:`<svg viewBox="0 0 200 180"><path d="M74 14 L126 14 L132 56 L176 168 L24 168 L68 56Z" fill="#F7A8B8"/><path d="M68 56 L132 56" stroke="#E0475F" stroke-width="7"/><path d="M90 56 l10 -10 l10 10 l-10 10z" fill="#E0475F"/><path d="M40 150 Q100 166 160 150" stroke="#fff" stroke-width="4" stroke-dasharray="6 6" fill="none"/><circle cx="86" cy="100" r="5" fill="#fff"/><circle cx="120" cy="120" r="5" fill="#fff"/><circle cx="96" cy="136" r="5" fill="#fff"/></svg>`}
+];
+const prodEl=$('#products');
+prodEl.innerHTML=products.map((p,i)=>`<article class="prod" data-k="${p.k}" style="--c:${p.c}"><div class="ph">${p.svg}<span class="tag">${['Educação','Empresas e órgãos','Saúde','Saúde','Arte e música','Sob medida'][i]}</span></div><div class="bd"><h3>${p.n}</h3><p>${p.d}</p><div class="row"><span class="mono">${p.m}</span><button type="button" data-p="${['Uniforme escolar','Fardamento','Jaleco','Pijama cirúrgico','Figurino de fanfarra','Peça exclusiva'][i]}">Simular orçamento</button></div></div></article>`).join('');
+$$('.prod').forEach(card=>{
+  if(RM||matchMedia('(hover:none)').matches)return;
+  card.addEventListener('pointermove',e=>{const r=card.getBoundingClientRect();const x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;card.style.transform=`rotateY(${x*12}deg) rotateX(${-y*10}deg) translateY(-4px)`});
+  card.addEventListener('pointerleave',()=>card.style.transform='');
+});
+$$('.chip').forEach(ch=>ch.addEventListener('click',()=>{
+  $$('.chip').forEach(c=>c.setAttribute('aria-pressed',c===ch));
+  const f=ch.dataset.f; $$('.prod').forEach(p=>p.hidden=!(f==='all'||p.dataset.k===f));
+}));
+prodEl.addEventListener('click',e=>{const b=e.target.closest('button[data-p]');if(!b)return;$('#fProduto').value=b.dataset.p;updWa();$('#demo').scrollIntoView({behavior:RM?'auto':'smooth'});setTimeout(()=>$('#fCliente').focus({preventScroll:true}),600)});
+
+/* ---------- 6 componentes ---------- */
+const ic={
+ cat:'<path d="M4 5h7v14H4zM13 5h7v6h-7zM13 13h7v6h-7z"/>',
+ form:'<path d="M6 3h9l3 3v15H6z"/><path d="M9 10h6M9 14h6M9 18h3"/>',
+ wa:'<path d="M20 12a8 8 0 0 1-11.8 7L4 20l1.1-4A8 8 0 1 1 20 12z"/><path d="M9 9.5c.5 2 2.5 4 4.5 4.5"/>',
+ crm:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 4v16"/>',
+ track:'<circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/><path d="M7 12h3M14 12h3"/>',
+ dash:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>'
+};
+const pieces=[
+ ['cat','Catálogo digital','Produtos organizados por categoria, com fotos, descrições e tabela de medidas.'],
+ ['form','Formulário de orçamento','Coleta padrão: produto, quantidade, tamanhos, personalização e prazo.'],
+ ['wa','WhatsApp Business','Respostas rápidas, etiquetas e mensagens-padrão de confirmação, produção e entrega.'],
+ ['crm','CRM ou planilha','Base única com cliente, canal, valor, responsável, etapa e próxima ação.'],
+ ['track','Acompanhamento do pedido','Status padronizados do recebimento até a entrega.'],
+ ['dash','Painel de indicadores','Tempo de resposta, conversão, retrabalho, ticket médio, recompra e satisfação.']
+];
+$('#pieces').innerHTML=pieces.map((p,i)=>`<div class="piece rv"><span class="nn">0${i+1}/06</span><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ic[p[0]]}</svg></div><h3>${p[1]}</h3><p>${p[2]}</p></div>`).join('');
+
+/* ---------- demo: formulário + quadro ---------- */
+const COLS=[['rec','Recebido','#8EA3C8'],['orc','Orçamento','#2B4DB8'],['apr','Aprovado','#C98A00'],['prod','Produção','#C4324B'],['ent','Entregue','#1F8F7C']];
+const detail={rec:'Solicitação recebida',orc:'Orçamento enviado',apr:'Aprovado pelo cliente',prod:'Em produção',ent:'Entregue e concluído'};
+let orders=[
+ {c:'Família Andrade',p:'Peça exclusiva',q:1,s:'rec'},
+ {c:'Banda Marcial Municipal',p:'Figurino de fanfarra',q:40,s:'orc'},
+ {c:'Clínica Bem-Estar',p:'Pijama cirúrgico',q:15,s:'apr'},
+ {c:'Colégio do Bairro',p:'Uniforme escolar',q:120,s:'prod'},
+ {c:'Secretaria de Saúde',p:'Jaleco',q:60,s:'ent'},
+ {c:'Loja Centro',p:'Fardamento',q:12,s:'ent'}
+].map(o=>({...o,ex:true}));
+function render(newIdx){
+  $('#cols').innerHTML=COLS.map(([k,n,c])=>{
+    const list=orders.map((o,i)=>({o,i})).filter(x=>x.o.s===k);
+    return `<div class="col"><h4>${n}<i>${list.length}</i></h4>${list.map(({o,i})=>`<div class="oc ${k==='ent'?'done':''} ${i===newIdx?'new':''}" style="--c:${c}"><span class="ex">${o.ex?'Exemplo':'Novo · você'}</span><b>${esc(o.c)}</b><small>${o.q}× ${esc(o.p)} · ${detail[k]}</small><button type="button" data-i="${i}">Avançar etapa →</button></div>`).join('')}</div>`;
+  }).join('');
+  const tot=orders.length, open=orders.filter(o=>o.s!=='ent').length, won=orders.filter(o=>['apr','prod','ent'].includes(o.s)).length, decided=orders.filter(o=>o.s!=='rec').length;
+  $('#kTot').textContent=tot; $('#kOpen').textContent=open; $('#kConv').textContent=(decided?Math.round(won/decided*100):0)+'%';
+}
+function esc(s){return String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]))}
+$('#cols').addEventListener('click',e=>{const b=e.target.closest('button[data-i]');if(!b)return;const o=orders[+b.dataset.i];const idx=COLS.findIndex(c=>c[0]===o.s);if(idx<COLS.length-1){o.s=COLS[idx+1][0];render(+b.dataset.i);toast(`${o.c}: ${detail[o.s].toLowerCase()}`)}});
+const dIn=$('#fPrazo'); const dd=new Date(Date.now()+30*864e5); dIn.value=dd.toISOString().slice(0,10);
+function updWa(){
+  const c=$('#fCliente').value.trim()||'cliente', p=$('#fProduto').value, q=$('#fQtd').value||'—', t=$('#fTam').value.trim(), pz=$('#fPrazo').value;
+  const pr=pz?new Date(pz+'T12:00').toLocaleDateString('pt-BR'):'a combinar';
+  $('#waMsg').innerHTML=`Olá, ${esc(c)}! 👋\nRecebemos sua solicitação de orçamento:\n• ${esc(q)}× ${esc(p)}${t?' (tam. '+esc(t)+')':''}\n• Prazo desejado: ${pr}\n\nNossa equipe confere as medidas e envia o orçamento em breve. Obrigado por escolher a Retrô Kids!<time>${new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})} ✓✓</time>`;
+}
+$$('#orderForm input, #orderForm select, #orderForm textarea').forEach(el=>el.addEventListener('input',updWa));
+$('#orderForm').addEventListener('submit',e=>{e.preventDefault();
+  orders.push({c:$('#fCliente').value.trim()||'Cliente',p:$('#fProduto').value,q:+$('#fQtd').value||1,s:'rec',ex:false});
+  render(orders.length-1); toast('Orçamento registrado na base única'); $('.board').scrollTo({left:0,behavior:'smooth'});
+});
+let tt; function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2200)}
+render(); updWa();
+
+/* ---------- SWOT ---------- */
+$$('.flip').forEach(f=>f.addEventListener('click',()=>f.setAttribute('aria-expanded',f.getAttribute('aria-expanded')!=='true')));
+setTimeout(()=>{ const first=$('.flip'); if(first && !RM){ first.setAttribute('aria-expanded','true'); } },0);
+
+/* ---------- Gantt ---------- */
+const g=$('#gantt'); const rows=[
+ ['Mapeamento do processo atual','Gestão',1,1,'#2B4DB8'],
+ ['Definição do fluxo e campos','Gestão + comercial',2,2,'#2B4DB8'],
+ ['Catálogo e formulário','Comercial e marketing',2,3,'#1F8F7C'],
+ ['CRM e WhatsApp','Comercial',3,4,'#1F8F7C'],
+ ['Treinamento da equipe','Gestão',4,4,'#C98A00'],
+ ['Projeto-piloto','Equipe · uniformes e fardamentos',5,8,'#C4324B'],
+ ['Avaliação e ajustes','Gestão',9,9,'#14214A']
+];
+let gh='<div class="hd">Etapa</div>'+Array.from({length:9},(_,i)=>`<div class="hd">S${i+1}</div>`).join('');
+rows.forEach((r,i)=>{ gh+=`<div class="nm"><div>${r[0]}<small>${r[1]}</small></div></div>`;
+  const s=r[2]+1, e=r[3]+2;
+  for(let w=1;w<r[2];w++) gh+='<div></div>';
+  gh+=`<div class="bar ${r[2]===5?'pilot':''}" data-i="${i}" style="--s:${s};--e:${e};--c:${r[4]}">${r[2]===r[3]?'S'+r[2]:'S'+r[2]+'–'+r[3]}</div>`;
+  for(let w=r[3]+1;w<=9;w++) gh+='<div></div>';
+});
+g.innerHTML=gh;
+// cada etapa ocupa sua própria linha do grid
+(function(){const cells=[...g.children];let row=1;let col=0;cells.forEach(c=>{
+  if(c.classList.contains('nm')){row++;col=1}
+  if(row>1){ c.style.gridRow=row; }
+});})();
+
+/* ---------- KPIs ---------- */
+const kp=[
+ ['−30%','Tempo de primeira resposta','em até 90 dias',30,'--mint','Média entre o contato e a primeira resposta'],
+ ['+15%','Conversão de orçamentos','em até 90 dias',15,'--blue','Pedidos aprovados ÷ orçamentos enviados'],
+ ['100%','Orçamentos registrados','desde o 1º dia',100,'--tape','Registrados ÷ total de novos orçamentos'],
+ ['−25%','Retrabalho por falta de dado','durante o piloto',25,'--coral','Ocorrências antes × depois'],
+ ['+10%','Ticket médio','em 6 meses',10,'--blue','Faturamento ÷ número de pedidos'],
+ ['+10%','Recompra','em 6 meses',10,'--mint','Clientes que voltaram ÷ clientes atendidos'],
+ ['≥90%','Satisfação pós-entrega','pesquisa mensal',90,'--tape','Avaliações positivas ÷ total'],
+ ['4 sem.','Projeto-piloto','semanas 5 a 8',44,'--coral','Tempo de teste em pedidos reais']
+];
+$('#kpis').innerHTML=kp.map(k=>`<div class="kpi rv"><div class="ring" data-ring="${k[3]}" data-color="${k[4]}"><svg viewBox="0 0 160 160"><circle class="bgc" cx="80" cy="80" r="66"/><circle class="fg" cx="80" cy="80" r="66"/></svg><b>${k[0]}</b></div><h4>${k[1]}</h4><span class="when">${k[2]}</span><p>${k[5]}</p></div>`).join('');
+
+/* ---------- equipe ---------- */
+const team=[
+ ['WR','Welton Rocha','Coordenação',11,'#2B4DB8',['Abertura','Resgate do escopo','Plano de implementação (1ª parte)','Encerramento']],
+ ['AR','Arthur Rebouças','Pesquisa',9,'#1F8F7C',['Diagnóstico organizacional','Riscos','Indicadores de desempenho']],
+ ['AJ','Adiran Júnior','Redação',8,'#C4324B',['Proposta de inovação','Funcionamento do Pedido Fácil','Demonstração visual']],
+ ['IM','Igor Meira','Revisão',12,'#C98A00',['Justificativa e benefícios','Priorização','Plano de implementação (2ª parte)']]
+];
+$('#team').innerHTML=team.map(t=>`<div class="mem rv" style="--c:${t[4]}"><span class="min">${t[3]}<small>min</small></span><div class="av">${t[0]}</div><h3>${t[1]}</h3><div class="role">${t[2]} no relatório</div><ul>${t[5].map(x=>`<li>${x}</li>`).join('')}</ul></div>`).join('');
+
+/* ---------- charts ---------- */
+const charts={};
+function base(){Chart.defaults.font.family='Figtree, system-ui, sans-serif';Chart.defaults.color=tok('--muted');Chart.defaults.borderColor=tok('--line');}
+const builders={
+ cMarket:()=>({type:'bar',data:{labels:['Produção 2025 (est.)','Produção 2026 (proj.)','Varejo 2026 (proj.)','Exportações 2026 (proj.)'],datasets:[{data:[4.4,1.1,0.7,3.3],backgroundColor:[tok('--blue'),tok('--tape'),tok('--coral'),tok('--mint')],borderRadius:8,maxBarThickness:70}]},
+   options:{maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'+'+c.raw.toLocaleString('pt-BR')+'%'}}},scales:{y:{beginAtZero:true,max:5,ticks:{callback:v=>v+'%'},grid:{color:tok('--line')}},x:{grid:{display:false}}},animation:{duration:RM?0:1400,easing:'easeOutQuart'}}}),
+ cCost:()=>({type:'bar',data:{labels:['Mapear','Catálogo/formulário','CRM (mês)','WhatsApp','Treinamento','Piloto (mês)'],datasets:[{data:[[0,300],[0,500],[0,200],[0,300],[0,500],[0,500]],backgroundColor:[tok('--blue'),tok('--mint'),tok('--mint'),tok('--mint'),tok('--tape'),tok('--coral')],borderRadius:6,borderSkipped:false,barThickness:16}]},
+   options:{indexAxis:'y',maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'R$ '+c.raw[0]+' a R$ '+c.raw[1]}}},scales:{x:{min:0,max:600,ticks:{callback:v=>'R$ '+v},grid:{color:tok('--line')}},y:{grid:{display:false}}},animation:{duration:RM?0:1200}}}),
+ cKpi:()=>({type:'bar',data:{labels:['Tempo de resposta','Conversão','Retrabalho','Ticket médio','Recompra'],datasets:[
+   {label:'Linha de base',data:[100,100,100,100,100],backgroundColor:tok('--surface-2'),borderColor:tok('--muted'),borderWidth:1,borderRadius:6},
+   {label:'Meta',data:[70,115,75,110,110],backgroundColor:[tok('--mint'),tok('--blue'),tok('--mint'),tok('--blue'),tok('--blue')],borderRadius:6}]},
+   options:{maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{usePointStyle:true}}},scales:{y:{min:0,max:130,grid:{color:tok('--line')}},x:{grid:{display:false}}},animation:{duration:RM?0:1400,delay:c=>RM?0:c.dataIndex*120}}}),
+ cTime:()=>({type:'doughnut',data:{labels:['Welton · 11 min','Igor · 12 min','Arthur · 9 min','Adiran · 8 min'],datasets:[{data:[11,12,9,8],backgroundColor:['#2B4DB8','#C98A00','#1F8F7C','#C4324B'],borderColor:tok('--surface'),borderWidth:4,hoverOffset:10}]},
+   options:{maintainAspectRatio:false,cutout:'62%',plugins:{legend:{position:'right',labels:{usePointStyle:true,padding:14}}},animation:{animateRotate:!RM,duration:RM?0:1400}}})
+};
+function makeChart(id){ if(charts[id]||!window.Chart)return; base(); charts[id]=new Chart($('#'+id),builders[id]()); }
+['cMarket','cCost','cKpi','cTime'].forEach(id=>{const c=$('#'+id); c.dataset.chart=id; io.observe(c);});
+setTimeout(()=>Object.keys(builders).forEach(makeChart),4000);
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{Object.keys(charts).forEach(k=>{charts[k].destroy();delete charts[k];makeChart(k)}); $$('[data-ring]').forEach(r=>r.querySelector('.fg').style.stroke=tok(r.dataset.color))});
+
+$$('.rv,[data-count],[data-ring],.gt .bar').forEach(el=>io.observe(el));
+
+/* ---------- copiar ---------- */
+$('#copyWa').addEventListener('click',()=>{const t=$('#wa').textContent;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast('Número copiado')).catch(()=>{const r=document.createRange();r.selectNodeContents($('#wa'));const s=getSelection();s.removeAllRanges();s.addRange(r);toast('Número selecionado, use Ctrl+C')})});
+
+/* ---------- 3D: carretel, agulha e botões ---------- */
+function three(){
+  if(!window.THREE)return; const canvas=$('#spool'); const stage=canvas.parentElement;
+  let renderer; try{renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});}catch(e){return}
+  renderer.setPixelRatio(Math.min(2,devicePixelRatio));
+  const scene=new THREE.Scene(); const cam=new THREE.PerspectiveCamera(36,1,.1,100); cam.position.set(0,0.4,9);
+  scene.add(new THREE.AmbientLight(0xffffff,.55));
+  const key=new THREE.DirectionalLight(0xffffff,1.1); key.position.set(4,6,6); scene.add(key);
+  const rim=new THREE.PointLight(0xF5B700,1.2,20); rim.position.set(-4,-2,3); scene.add(rim);
+  const blue=new THREE.PointLight(0x6f8cff,.8,20); blue.position.set(4,-3,-2); scene.add(blue);
+
+  // textura de linha enrolada
+  function threadTex(col){const c=document.createElement('canvas');c.width=64;c.height=256;const x=c.getContext('2d');x.fillStyle=col;x.fillRect(0,0,64,256);
+    for(let i=0;i<256;i+=4){x.fillStyle='rgba(0,0,0,'+(0.12+Math.random()*.1)+')';x.fillRect(0,i,64,1.2);x.fillStyle='rgba(255,255,255,.14)';x.fillRect(0,i+2,64,1)}
+    const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(8,1);return t}
+  const wood=new THREE.MeshStandardMaterial({color:0xD9A066,roughness:.6,metalness:.05});
+  function spool(col,s){
+    const gr=new THREE.Group();
+    const core=new THREE.Mesh(new THREE.CylinderGeometry(.62,.62,1.5,64,1,true),new THREE.MeshStandardMaterial({map:threadTex(col),roughness:.75}));
+    const inner=new THREE.Mesh(new THREE.CylinderGeometry(.62,.62,1.5,64),new THREE.MeshStandardMaterial({color:col,roughness:.8}));
+    inner.scale.set(.99,.99,.99);
+    const f1=new THREE.Mesh(new THREE.CylinderGeometry(.92,.92,.16,64),wood); f1.position.y=.83;
+    const f2=f1.clone(); f2.position.y=-.83;
+    const hole=new THREE.Mesh(new THREE.CylinderGeometry(.16,.16,.18,32),new THREE.MeshStandardMaterial({color:0x3a2614}));hole.position.y=.84;
+    const hole2=hole.clone();hole2.position.y=-.84;
+    gr.add(inner,core,f1,f2,hole,hole2); gr.scale.setScalar(s); return gr;
+  }
+  const world=new THREE.Group(); scene.add(world);
+  const main=spool('#F5B700',1.25); main.rotation.z=.35; main.rotation.x=.25; world.add(main);
+  const s2=spool('#2B4DB8',.62); s2.position.set(2.3,1.55,-1.2); s2.rotation.set(.6,0,-.5); world.add(s2);
+  const s3=spool('#E0475F',.55); s3.position.set(-2.4,-1.7,-.6); s3.rotation.set(-.4,0,.7); world.add(s3);
+
+  // linha saindo do carretel até a agulha
+  const pts=[new THREE.Vector3(.75,.2,.2),new THREE.Vector3(1.6,-.4,.9),new THREE.Vector3(1.2,-1.5,1.4),new THREE.Vector3(.1,-1.9,1.2),new THREE.Vector3(-1,-1.2,1.6),new THREE.Vector3(-1.9,-.2,1.3)];
+  const curve=new THREE.CatmullRomCurve3(pts);
+  const tube=new THREE.Mesh(new THREE.TubeGeometry(curve,160,.028,8,false),new THREE.MeshStandardMaterial({color:0xF5B700,roughness:.5,emissive:0x3a2a00}));
+  world.add(tube);
+  // agulha
+  const needle=new THREE.Group();
+  const metal=new THREE.MeshStandardMaterial({color:0xE6E9F0,metalness:.95,roughness:.18});
+  const shaft=new THREE.Mesh(new THREE.CylinderGeometry(.035,.035,1.9,16),metal);
+  const tip=new THREE.Mesh(new THREE.ConeGeometry(.035,.35,16),metal); tip.position.y=-1.12;
+  const eye=new THREE.Mesh(new THREE.TorusGeometry(.06,.018,8,20),metal); eye.position.y=1.0;
+  needle.add(shaft,tip,eye); needle.position.set(-2.1,.4,1.3); needle.rotation.set(.3,.2,-.9); world.add(needle);
+
+  // botões
+  const btnCols=[0xE0475F,0x2B4DB8,0xF5B700,0x1F8F7C,0xF3F5FF,0xC4324B,0x8EA9FF];
+  const buttons=[];
+  function makeBtn(col,r){
+    const gr=new THREE.Group(); const m=new THREE.MeshStandardMaterial({color:col,roughness:.35,metalness:.1});
+    const disc=new THREE.Mesh(new THREE.CylinderGeometry(r,r,r*.28,40),m);
+    const rimm=new THREE.Mesh(new THREE.TorusGeometry(r*.92,r*.1,10,40),m); rimm.rotation.x=Math.PI/2; rimm.position.y=r*.15;
+    gr.add(disc,rimm);
+    const hm=new THREE.MeshStandardMaterial({color:0x111827});
+    [[1,1],[1,-1],[-1,1],[-1,-1]].forEach(([a,b])=>{const h=new THREE.Mesh(new THREE.CylinderGeometry(r*.12,r*.12,r*.3,12),hm);h.position.set(a*r*.26,.01,b*r*.26);gr.add(h)});
+    return gr;
+  }
+  const spots=[[-1.9,1.9,.4],[2.6,-.6,.6],[1.2,2.3,.9],[-3,.9,-1],[2.9,.9,1.2],[-.6,-2.6,.2],[.3,2.9,-1.6],[3.2,-2.2,-.8]];
+  spots.forEach((p,i)=>{const b=makeBtn(btnCols[i%btnCols.length],.22+((i*37)%10)/40);b.position.set(...p);b.rotation.set(Math.random()*3,Math.random()*3,Math.random()*3);b.userData={y:p[1],sp:.6+Math.random()*.8,ph:Math.random()*6,rx:(Math.random()-.5)*.02,ry:(Math.random()-.5)*.02};world.add(b);buttons.push(b)});
+
+  function size(){const w=stage.clientWidth,h=stage.clientHeight||420;renderer.setSize(w,h,false);cam.aspect=w/h;cam.position.z=w<520?11:9;cam.updateProjectionMatrix()}
+  new ResizeObserver(size).observe(stage); size();
+
+  let tx=0,ty=0,rx=0,ry=0,drag=false,lx=0,ly=0,spin=0,vis=true;
+  stage.addEventListener('pointermove',e=>{const r=stage.getBoundingClientRect();tx=((e.clientX-r.left)/r.width-.5);ty=((e.clientY-r.top)/r.height-.5);
+    if(drag){spin+=(e.clientX-lx)*.01;ry+=(e.clientY-ly)*.004;lx=e.clientX;ly=e.clientY}});
+  canvas.addEventListener('pointerdown',e=>{drag=true;lx=e.clientX;ly=e.clientY;canvas.style.cursor='grabbing'});
+  addEventListener('pointerup',()=>{drag=false;canvas.style.cursor='grab'});
+  new IntersectionObserver(es=>{vis=es[0].isIntersecting;if(vis&&!RM)loop()}).observe(stage);
+
+  const t0=performance.now(); let running=false;
+  function frame(){
+    const t=(performance.now()-t0)/1000;
+    rx+=(ty*.35-rx)*.05;
+    world.rotation.y=spin+tx*.5+(RM?0:t*.12); world.rotation.x=rx+ry*.2;
+    main.rotation.y=RM?0:t*.6;
+    s2.rotation.y=-t*.8; s3.rotation.y=t*.9;
+    needle.position.y=.4+Math.sin(t*1.3)*.12;
+    buttons.forEach(b=>{const u=b.userData;b.position.y=u.y+Math.sin(t*u.sp+u.ph)*.18;b.rotation.x+=u.rx;b.rotation.y+=u.ry});
+    renderer.render(scene,cam);
+  }
+  function loop(){ if(running)return; running=true; (function f(){ if(!vis){running=false;return} frame(); requestAnimationFrame(f)})() }
+  if(RM) frame(); else loop();
+}
+three();
+})();
+</script>
