@@ -100,9 +100,9 @@ model-viewer::part(default-progress-bar){background:var(--tape);height:3px}
   background:linear-gradient(90deg, transparent 0%, rgba(255,228,170,.10) 30%, rgba(255,232,185,.20) 50%, rgba(255,228,170,.10) 70%, transparent 100%);
   -webkit-mask:linear-gradient(180deg, transparent 0%, #000 30%, #000 70%, transparent 100%);mask:linear-gradient(180deg, transparent 0%, #000 30%, #000 70%, transparent 100%)}
 .beam.b2{left:30%;width:16%;opacity:.6}
-#dust{position:absolute;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
+#dust{position:absolute;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none;will-change:transform;transform:translateZ(0)}
 .reel-pin::after{content:"";position:absolute;inset:0;z-index:5;pointer-events:none;background:radial-gradient(ellipse 85% 80% at 55% 50%, transparent 55%, rgba(4,8,22,.6) 100%)}
-.seam{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;overflow:visible}
+.seam{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;overflow:visible;will-change:transform;transform:translateZ(0)}
 .obj,.bt{position:absolute;left:0;top:0;pointer-events:none;user-select:none;-webkit-user-drag:none;will-change:transform,opacity;backface-visibility:hidden}
 .obj{z-index:2;height:auto}
 #tapeCv{position:absolute;left:0;top:0;z-index:2;pointer-events:none;will-change:transform,opacity}
@@ -544,9 +544,8 @@ tbody tr:hover{background:color-mix(in srgb,var(--tape) 10%,transparent)}
       <div class="beam" aria-hidden="true"></div><div class="beam b2" aria-hidden="true"></div>
       <canvas id="dust" aria-hidden="true"></canvas>
       <svg class="seam" id="seam" aria-hidden="true" preserveAspectRatio="none">
-        <defs><mask id="seamMask" maskUnits="userSpaceOnUse"><path id="seamReveal" fill="none" stroke="#fff" stroke-width="14" stroke-linecap="round" pathLength="1" stroke-dasharray="1 1" stroke-dashoffset="1"/></mask></defs>
         <path id="seamChalk" fill="none" stroke="rgba(255,255,255,.13)" stroke-width="1.5" stroke-dasharray="3 7"/>
-        <path id="seamThread" fill="none" stroke="#FFC51F" stroke-width="3" stroke-linecap="round" stroke-dasharray="15 9" mask="url(#seamMask)"/>
+        <path id="seamThread" fill="none" stroke="#FFC51F" stroke-width="3" stroke-linecap="round" stroke-dasharray="0 100000"/>
       </svg>
       <div class="needle-tip" id="needleTip" aria-hidden="true"></div>
       <div id="buttons" aria-hidden="true"></div>
@@ -1092,7 +1091,7 @@ $$('.prod model-viewer').forEach(mv=>{
   const reel=$('#reel'), pin=$('#reelPin'); if(!reel)return;
   const sc=$('#oSc'), sp=$('#oSp'), tip=$('#needleTip'), mk=$('#rulerMk');
   const beats=$$('.beat',reel), beams=$$('.beam',reel);
-  const svg=$('#seam'), sReveal=$('#seamReveal'), sChalk=$('#seamChalk'), sThread=$('#seamThread');
+  const svg=$('#seam'), sChalk=$('#seamChalk'), sThread=$('#seamThread');
   const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v)), lerp=(a,b,t)=>a+(b-a)*t;
   const seg=(p,a,b)=>clamp((p-a)/(b-a)), ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2, out=t=>1-Math.pow(1-t,3);
   const HEAD=80;
@@ -1119,7 +1118,7 @@ $$('.prod model-viewer').forEach(mv=>{
   const pals=[['#C9A045','#6E5214','#FFE7A0',1],['#22356E','#0B1533','#5A78C8',0],['#EDEBE3','#9C978A','#FFFFFF',0],['#B3283B','#5A0E19','#F06A7C',0]];
   // [x, y (fração da cena), tamanho em px, profundidade, paleta]
   const layout=[[.50,.16,44,.6,0],[.86,.20,28,.45,1],[.93,.62,56,1.2,2],[.42,.80,34,.8,3],[.74,.88,70,1.4,0],[.58,.38,22,.5,2],[.98,.42,38,.9,1],[.34,.28,26,.55,0],[.80,.08,48,1.1,3],[.64,.72,28,.7,1]];
-  const host=$('#buttons');
+  const host=$('#buttons'); if(innerWidth<720) layout.length=7;
   const bts=layout.map((L,i)=>{ const pl=pals[L[4]], im=new Image(); im.className='bt'+(L[3]>1?' front':''); im.alt=''; im.decoding='async';
     im.src=buttonSprite(L[2],pl[0],pl[1],pl[2],pl[3]); im.style.width=L[2]+'px'; im.style.height=L[2]+'px'; if(L[3]<.6) im.style.opacity='.6';
     host.appendChild(im); return {el:im,x:L[0],y:L[1],s:L[2],z:L[3],r0:i*37,ph:i*1.7,dir:i%2?1:-1}; });
@@ -1183,7 +1182,7 @@ $$('.prod model-viewer').forEach(mv=>{
     c.restore();
   }
 
-  let mW=0, mH=0;
+  let mW=0, mH=0, lastSeam=-1;
   function measure(force){
     const w=pin.clientWidth, h=pin.clientHeight;
     // a barra do navegador no celular muda a altura ao rolar: ignora mudanças pequenas para não refazer a cena
@@ -1194,7 +1193,7 @@ $$('.prod model-viewer').forEach(mv=>{
     const d=mob
       ? `M ${-.05*W} ${.6*H} C ${.3*W} ${.52*H}, ${.2*W} ${.94*H}, ${.55*W} ${.86*H} S ${.95*W} ${.64*H}, ${1.08*W} ${.72*H}`
       : `M ${-.03*W} ${.84*H} C ${.22*W} ${1.0*H}, ${.34*W} ${.42*H}, ${.6*W} ${.56*H} S ${.88*W} ${.16*H}, ${1.05*W} ${.28*H}`;
-    [sReveal,sChalk,sThread].forEach(e=>e.setAttribute('d',d)); len=sThread.getTotalLength();
+    [sChalk,sThread].forEach(e=>e.setAttribute('d',d)); len=sThread.getTotalLength(); lastSeam=-1;
     [sc,sp].forEach(e=>{ e._w=e.offsetWidth; e._h=e.offsetHeight; });
     rulerH=mk.parentElement.offsetHeight; seedDust(); if(mob||RM) drawDust(); buildTape(); lastT=-1;
   }
@@ -1214,7 +1213,9 @@ $$('.prod model-viewer').forEach(mv=>{
     const iP=out(seg(p,.66,.88));
     put(sp, cx+lerp(.15*W,0,iP), cy+lerp(.75*H,0,iP)+Math.sin(t*.7)*5*wob*iP, lerp(-24,-8,iP), lerp(.8,1,iP), clamp(iP*1.3));
     const k=ease(seg(p,.28,.72));
-    sReveal.style.strokeDashoffset=(1-k).toFixed(4);
+    // fio revelado até o comprimento atual: pontos de 15 px com intervalos de 9 px, só refeito a cada 3 px
+    const rl=k*len; if(Math.abs(rl-lastSeam)>3||(k===0)!==(lastSeam<=0)){ lastSeam=rl; const arr=[]; let acc=0;
+      while(acc+24<=rl){ arr.push(15,9); acc+=24; } const rem=rl-acc; arr.push(Math.min(15,rem).toFixed(1), (len+60).toFixed(0)); sThread.style.strokeDasharray=arr.join(' '); }
     const pt=sThread.getPointAtLength(k*len);
     tip.style.transform=`translate3d(${pt.x.toFixed(1)}px,${pt.y.toFixed(1)}px,0)`; tip.style.opacity=k>0.002&&k<.998?1:0;
     for(const b of bts){
@@ -1236,10 +1237,10 @@ $$('.prod model-viewer').forEach(mv=>{
     const dt=Math.min(.05,lastNow?(now-lastNow)/1000:.016); lastNow=now;
     // posição lida a cada quadro (não só no evento de rolagem) para acompanhar o dedo sem atraso
     pT=clamp((scrollY-top0)/span);
-    if(mob||RM) p=pT; else { p+=(pT-p)*(1-Math.pow(.86,dt*60)); if(Math.abs(pT-p)<.0002) p=pT; }
+    if(RM) p=pT; else { const tau=mob?.11:.14; p+=(pT-p)*(1-Math.exp(-dt/tau)); if(Math.abs(pT-p)<.00015) p=pT; }
     render(now/1000);
     // no celular, parado = sem trabalho: o laço dorme até a próxima rolagem
-    if((mob||RM) && p===lastP){ running=false; lastNow=0; return; }
+    if((mob||RM) && p===pT && p===lastP){ running=false; lastNow=0; return; }
     lastP=p; requestAnimationFrame(frame);
   }
   function kick(){ if(!running){ running=true; requestAnimationFrame(frame); } }
