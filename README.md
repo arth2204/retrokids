@@ -17,6 +17,8 @@ Integrantes: Adiran Júnior, Arthur Rebouças, Igor Meira e Welton Rocha.
 
 ## Como abrir
 
-Abra `index.html` no navegador. A página usa Three.js e Chart.js via CDN, então precisa de internet.
+Abra `index.html` no navegador. Use um servidor local (os modelos 3D em `assets/3d` não carregam abrindo o arquivo direto). A página usa model-viewer e Chart.js via CDN, então precisa de internet.
+
+Os modelos 3D das peças foram gerados a partir de fotos de estúdio criadas por IA e são ilustrativos, não fotos reais da Retrô Kids.
 
 Site acadêmico, sem fins comerciais.
