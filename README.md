@@ -19,6 +19,6 @@ Integrantes: Adiran Júnior, Arthur Rebouças, Igor Meira e Welton Rocha.
 
 Abra `index.html` no navegador. Use um servidor local (os modelos 3D em `assets/3d` não carregam abrindo o arquivo direto). A página usa model-viewer e Chart.js via CDN, então precisa de internet.
 
-Os modelos 3D das peças foram gerados a partir de fotos de estúdio criadas por IA e são ilustrativos, não fotos reais da Retrô Kids.
+Os modelos 3D das peças foram gerados a partir de fotos de estúdio criadas por IA e são ilustrativos, não fotos reais da Retrô Kids. Na abertura, a tesoura e os carretéis são fotos em domínio público (CC0, via Openverse); a fita métrica, os botões e a costura são desenhados em código.
 
 Site acadêmico, sem fins comerciais.
