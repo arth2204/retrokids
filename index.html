@@ -504,6 +504,53 @@ tbody tr:hover{background:color-mix(in srgb,var(--tape) 10%,transparent)}
   .piece:hover{transform:none}
 
 }
+/* ---------- celular: abertura animada pelo próprio navegador, presa à rolagem (sem JavaScript por quadro) ----------
+   A posição de cada peça é calculada pelo navegador junto com a rolagem, na placa de vídeo, então não há atraso nem tremor.
+   O JavaScript só mede a cena uma vez e grava --W, --H, --rh e as posições dos botões. */
+@property --cm{syntax:'<integer>';inherits:false;initial-value:0}
+@supports (animation-timeline: view()) and (view-timeline-inset: 80px 0px){
+@media (max-width: 719.98px) and (prefers-reduced-motion: no-preference){
+  .reel.css-tl{view-timeline:--reel block;view-timeline-inset:80px 0px}
+  .css-tl .obj, .css-tl #tapeCv, .css-tl .bt, .css-tl .beat, .css-tl .needle-tip, .css-tl .seam, .css-tl .beam, .css-tl .mk, .css-tl .reel-hint{
+    animation-timing-function:linear;animation-fill-mode:both;animation-duration:1ms;
+    animation-timeline:--reel;animation-range:contain 0% contain 100%}
+  .css-tl .obj{left:calc(var(--W) * .52);top:calc(var(--H) * .7)}
+  .css-tl #oSc{animation-name:tlSc} .css-tl #oSp{animation-name:tlSp} .css-tl #tapeCv{animation-name:tlTape}
+  .css-tl .seam{animation-name:tlSeam} .css-tl .needle-tip{animation-name:tlTip;margin:0;offset-rotate:0deg}
+  .css-tl .bt{animation-name:tlBt} .css-tl .beam{animation-name:tlBeam} .css-tl .beam.b2{animation-name:tlBeam2}
+  .css-tl .beat[data-c="0.06"]{animation-name:tlB1} .css-tl .beat[data-c="0.5"]{animation-name:tlB2} .css-tl .beat[data-c="0.92"]{animation-name:tlB3}
+  .css-tl .beat.off{visibility:visible}
+  .css-tl .mk{animation-name:tlMk;font-size:0} .css-tl .mk::before{counter-reset:cm var(--cm);content:counter(cm) " cm";font-size:10px}
+  .css-tl .reel-hint{animation-name:tlHint;transition:none}
+}}
+@keyframes tlSc{
+  0%,24%{transform:translate(-50%,-50%) translate(calc(var(--W) * .7),calc(var(--H) * .25)) rotate(48deg);opacity:0}
+  34%{transform:translate(-50%,-50%) translate(calc(var(--W) * .09),calc(var(--H) * .03)) rotate(-8deg);opacity:1}
+  44%{transform:translate(-50%,-50%) rotate(-16deg);opacity:1}
+  53%{transform:translate(-50%,-50%) translate(calc(var(--W) * -.05),calc(var(--H) * .015)) rotate(-12deg)}
+  62%{transform:translate(-50%,-50%) translate(calc(var(--W) * -.1),calc(var(--H) * .03)) rotate(-16deg);opacity:1}
+  72%{transform:translate(-50%,-50%) translate(calc(var(--W) * -.55),calc(var(--H) * -.02)) rotate(-26deg);opacity:1}
+  80%,100%{transform:translate(-50%,-50%) translate(calc(var(--W) * -1),calc(var(--H) * -.07)) rotate(-36deg);opacity:0}}
+@keyframes tlSp{
+  0%,66%{transform:translate(-50%,-50%) translate(calc(var(--W) * .15),calc(var(--H) * .75)) rotate(-24deg) scale(.8);opacity:0}
+  77%{transform:translate(-50%,-50%) translate(calc(var(--W) * .02),calc(var(--H) * .09)) rotate(-10deg) scale(.97);opacity:1}
+  88%,100%{transform:translate(-50%,-50%) rotate(-8deg) scale(1);opacity:1}}
+@keyframes tlTape{
+  0%{transform:rotate(-6deg) scale(1);clip-path:inset(0 34% 0 0);opacity:1}
+  20%{transform:rotate(2deg) scale(1.05);clip-path:inset(0 0 0 0);opacity:1}
+  32%{transform:translate(calc(var(--W) * -.5),calc(var(--H) * -.055)) rotate(-11deg) scale(.93);clip-path:inset(0 0 0 0);opacity:1}
+  42%,100%{transform:translate(calc(var(--W) * -.9),calc(var(--H) * -.1)) rotate(-22deg) scale(.84);clip-path:inset(0 0 0 0);opacity:0}}
+@keyframes tlSeam{0%,28%{clip-path:inset(0 100% 0 0)} 50%{clip-path:inset(0 50% 0 0)} 72%,100%{clip-path:inset(0 0 0 0)}}
+@keyframes tlTip{0%,27.9%{offset-distance:0%;opacity:0} 28%{offset-distance:0%;opacity:1} 72%{offset-distance:100%;opacity:1} 72.1%,100%{offset-distance:100%;opacity:0}}
+@keyframes tlBt{from{transform:translate3d(var(--bx),var(--by0),0) rotate(var(--br0))} to{transform:translate3d(var(--bx),var(--by1),0) rotate(var(--br1))}}
+@keyframes tlBeam{from{transform:rotate(-22deg)} to{transform:rotate(-6deg)}}
+@keyframes tlBeam2{from{transform:rotate(-14deg)} to{transform:rotate(-4deg)}}
+@keyframes tlB1{0%,21%{opacity:1;translate:0 4px;visibility:visible} 29%{opacity:0;translate:0 -16px;visibility:hidden} 100%{opacity:0;visibility:hidden}}
+@keyframes tlB2{0%,27%{opacity:0;translate:0 16px;visibility:hidden} 35%{opacity:1;translate:0 10px;visibility:visible} 65%{opacity:1;translate:0 -10px;visibility:visible} 73%,100%{opacity:0;translate:0 -16px;visibility:hidden}}
+@keyframes tlB3{0%,69%{opacity:0;translate:0 16px;visibility:hidden} 77%{opacity:1;translate:0 10px;visibility:visible} 100%{opacity:1;translate:0 -6px;visibility:visible}}
+@keyframes tlMk{from{transform:translateY(0) translateY(-50%);--cm:0} to{transform:translateY(var(--rh)) translateY(-50%);--cm:120}}
+@keyframes tlHint{0%{opacity:1} 2%,100%{opacity:0}}
+
 @media (prefers-reduced-motion: reduce){
   *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 }
@@ -1183,6 +1230,21 @@ $$('.prod model-viewer').forEach(mv=>{
   }
 
   let mW=0, mH=0, lastSeam=-1;
+  // celular com suporte a animação presa à rolagem: o navegador anima tudo; o JS só prepara a cena uma vez
+  const CSSTL=!RM && innerWidth<720 && window.CSS && CSS.supports('animation-timeline','view()') && CSS.supports('view-timeline-inset','80px 0px');
+  if(CSSTL) reel.classList.add('css-tl');
+  function setupCssTimeline(d){
+    const cx=W*.52, cy=H*.7;
+    pin.style.setProperty('--W',W+'px'); pin.style.setProperty('--H',H+'px'); pin.style.setProperty('--rh',rulerH+'px');
+    // fita: desenhada inteira uma vez, posicionada pelo seu ponto de origem; o "desenrolar" é um recorte animado
+    lastK=-1; drawTape(1); tcv.style.left=(cx-tOx).toFixed(1)+'px'; tcv.style.top=(cy-tOy).toFixed(1)+'px';
+    // costura completa (o recorte animado revela da esquerda para a direita) e agulha correndo pelo mesmo caminho
+    sThread.style.strokeDasharray='15 9'; tip.style.offsetPath=`path('${d}')`;
+    for(const b of bts){ const bx=(.06+b.x*.88)*W-b.s/2, base=(.46+b.y*.54)*H-b.s/2;
+      b.el.style.setProperty('--bx',bx.toFixed(1)+'px');
+      b.el.style.setProperty('--by0',(base+.3*H*.35*b.z).toFixed(1)+'px'); b.el.style.setProperty('--by1',(base-.7*H*.35*b.z).toFixed(1)+'px');
+      b.el.style.setProperty('--br0',b.r0+'deg'); b.el.style.setProperty('--br1',(b.r0+220*b.z*b.dir)+'deg'); }
+  }
   function measure(force){
     const w=pin.clientWidth, h=pin.clientHeight;
     // a barra do navegador no celular muda a altura ao rolar: ignora mudanças pequenas para não refazer a cena
@@ -1196,6 +1258,7 @@ $$('.prod model-viewer').forEach(mv=>{
     [sChalk,sThread].forEach(e=>e.setAttribute('d',d)); len=sThread.getTotalLength(); lastSeam=-1;
     [sc,sp].forEach(e=>{ e._w=e.offsetWidth; e._h=e.offsetHeight; });
     rulerH=mk.parentElement.offsetHeight; seedDust(); if(mob||RM) drawDust(); buildTape(); lastT=-1;
+    if(CSSTL) setupCssTimeline(d);
   }
   const put=(el,x,y,rot,s,op)=>{ el.style.transform=`translate3d(${(x-el._w/2).toFixed(1)}px,${(y-el._h/2).toFixed(1)}px,0) rotate(${rot.toFixed(2)}deg) scale(${s.toFixed(3)})`; el.style.opacity=op.toFixed(3); };
   let lastCm=-1;
@@ -1243,7 +1306,7 @@ $$('.prod model-viewer').forEach(mv=>{
     if((mob||RM) && p===pT && p===lastP){ running=false; lastNow=0; return; }
     lastP=p; requestAnimationFrame(frame);
   }
-  function kick(){ if(!running){ running=true; requestAnimationFrame(frame); } }
+  function kick(){ if(CSSTL) return; if(!running){ running=true; requestAnimationFrame(frame); } }
   addEventListener('scroll',kick,{passive:true});
   new ResizeObserver(()=>{ measure(false); lastP=-1; kick(); }).observe(pin);
   new IntersectionObserver(es=>{ vis=es[0].isIntersecting; if(vis){ lastP=-1; kick(); } }).observe(pin);
