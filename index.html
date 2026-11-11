@@ -132,11 +132,11 @@ section.sec{padding-block:96px 40px;scroll-margin-top:70px}
 .story{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:40px;align-items:start}
 .quote{font:600 clamp(26px,3vw,38px)/1.15 var(--f-display);letter-spacing:-.02em}
 .quote mark{background:linear-gradient(transparent 58%,var(--tape) 58%);color:inherit;padding:0 2px}
-.tl{list-style:none;margin:0;padding:0;position:relative}
-.tl::before{content:"";position:absolute;left:62px;top:6px;bottom:6px;border-left:2px dashed var(--line)}
-.tl li{display:grid;grid-template-columns:62px 1fr;gap:22px;padding-bottom:26px;position:relative}
-.tl li::after{content:"";position:absolute;left:56px;top:7px;width:14px;height:14px;border-radius:50%;background:var(--tape);box-shadow:0 0 0 4px var(--bg)}
-.tl .y{font:500 14px/1.3 var(--f-mono);color:var(--blue);padding-top:3px}
+.tl{--tlw:92px;list-style:none;margin:0;padding:0;position:relative}
+.tl::before{content:"";position:absolute;left:var(--tlw);top:6px;bottom:6px;border-left:2px dashed var(--line)}
+.tl li{display:grid;grid-template-columns:var(--tlw) minmax(0,1fr);gap:26px;padding-bottom:26px;position:relative}
+.tl li::after{content:"";position:absolute;left:calc(var(--tlw) - 6px);top:7px;width:14px;height:14px;border-radius:50%;background:var(--tape);box-shadow:0 0 0 4px var(--bg)}
+.tl .y{font:500 13.5px/1.3 var(--f-mono);color:var(--blue);padding:3px 18px 0 0;white-space:nowrap;text-align:right}
 .tl h4{font-size:19px;margin-bottom:4px;font-weight:600}
 .tl p{color:var(--muted);font-size:15px}
 
@@ -269,7 +269,7 @@ textarea{resize:vertical;min-height:62px}
 .type:nth-child(1) b{color:var(--blue)} .type:nth-child(2) b{color:var(--coral)} .type:nth-child(3) b{color:var(--mint)}
 
 /* gantt */
-.gantt{overflow-x:auto}
+.gantt{position:relative}
 .gt{min-width:760px;display:grid;grid-template-columns:240px repeat(9,1fr);border:1px solid var(--line);border-radius:16px;background:var(--surface);overflow:hidden}
 .gt > div{padding:12px 10px;border-bottom:1px solid var(--line);font-size:14px;min-height:50px;display:flex;align-items:center}
 .gt .hd{font:500 11px/1 var(--f-mono);color:var(--muted);letter-spacing:.06em;text-transform:uppercase;background:var(--surface-2);justify-content:center}
@@ -364,8 +364,37 @@ tbody tr:hover{background:color-mix(in srgb,var(--tape) 10%,transparent)}
   .final .cols2{grid-template-columns:1fr}
   form .two{grid-template-columns:1fr}
   .ringrow{flex-direction:column;align-items:flex-start}
-  .stage .label{display:none}
+  .stage .l2{display:none}
+  .stage .l1{top:auto;bottom:10px;right:50%;transform:translateX(50%);border:0;padding:7px 12px;border-radius:99px;background:rgba(255,255,255,.1);color:var(--hero-ink);white-space:nowrap}
+  .stage .l1 br{display:none}
 }
+/* ---- dicas de interação ---- */
+.hint{display:inline-flex;align-items:center;gap:8px;font:500 12px/1.35 var(--f-mono);letter-spacing:.03em;color:var(--blue);margin:0 0 14px}
+.hint svg{flex:none;width:16px;height:16px}
+.hint .go{animation:nudge 1.6s ease-in-out infinite}
+.hint .tap{animation:tap 1.8s ease-in-out infinite;transform-origin:50% 60%}
+@keyframes nudge{0%,100%{transform:translateX(0)}50%{transform:translateX(5px)}}
+@keyframes tap{0%,100%{transform:scale(1)}45%{transform:scale(.82)}60%{transform:scale(1.05)}}
+
+/* ---- gráfico revelado ao arrastar ---- */
+.scrub{--p:20%;position:relative;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:ew-resize;outline-offset:6px}
+.scrub-veil{position:absolute;top:0;bottom:0;left:var(--p);right:0;background:color-mix(in srgb,var(--surface) 86%,transparent);pointer-events:none;z-index:2;border-radius:0 12px 12px 0;transition:opacity .45s}
+.scrub-edge{position:absolute;top:0;bottom:0;left:var(--p);width:0;border-left:2px dashed var(--tape);pointer-events:none;z-index:3;transition:opacity .45s}
+.scrub-pill{position:absolute;top:50%;left:0;transform:translate(-50%,-50%);display:inline-flex;align-items:center;gap:7px;white-space:nowrap;
+  font:600 12px/1 var(--f-body);background:var(--tape);color:var(--tape-ink);padding:9px 12px;border-radius:99px;box-shadow:0 8px 20px -8px rgba(0,0,0,.45)}
+.scrub-pill svg{width:14px;height:14px;animation:nudge 1.4s ease-in-out infinite}
+.scrub.done{cursor:auto}
+.scrub.done .scrub-veil,.scrub.done .scrub-edge{opacity:0}
+.scrub.dragging .scrub-pill svg{animation:none}
+
+/* ---- SWOT: dica para virar ---- */
+.flip-hint{position:absolute;top:20px;right:20px;display:inline-flex;align-items:center;gap:7px;font:600 12px/1 var(--f-body);background:rgba(255,255,255,.2);color:#fff;padding:8px 11px;border-radius:99px}
+.flip-hint svg{width:15px;height:15px;animation:spinHint 2.4s ease-in-out infinite}
+@keyframes spinHint{0%,60%,100%{transform:rotate(0)}80%{transform:rotate(-180deg)}}
+.flip .b::after{content:"↺ toque para voltar";position:absolute;right:20px;bottom:16px;font:500 11px/1 var(--f-mono);color:var(--muted)}
+.flip .in.nudge{animation:peek 1.4s cubic-bezier(.3,.7,.3,1) 2}
+@keyframes peek{0%,100%{transform:rotateY(0)}40%{transform:rotateY(22deg)}}
+
 /* ---- telas menores: nada rola para o lado, tudo empilha na vertical ---- */
 @media (max-width: 1020px){
   .menu-btn{display:inline-flex}
@@ -383,7 +412,6 @@ tbody tr:hover{background:color-mix(in srgb,var(--tape) 10%,transparent)}
   .cols{grid-template-columns:1fr;min-width:0}
   .col{min-height:0}
   .col:empty{display:none}
-  .gantt{overflow:visible}
   .gt{min-width:0;grid-template-columns:minmax(0,1fr) repeat(9,minmax(14px,24px))}
   .gt > div{padding:10px 8px;min-height:44px;font-size:13.5px}
   .gt .hd{padding:10px 0;font-size:10px;justify-content:center}
@@ -464,7 +492,7 @@ tbody tr:hover{background:color-mix(in srgb,var(--tape) 10%,transparent)}
     </div>
     <div class="stage" aria-label="Carretel de linha, agulha e botões em 3D. Arraste para girar.">
       <canvas id="spool"></canvas>
-      <div class="label l1">carretel 3D<br>arraste para girar</div>
+      <div class="label l1">carretel 3D ·<br>↔ arraste para girar</div>
       <div class="label l2">linha · agulha · botões<br>o kit de toda confecção</div>
     </div>
   </div>
@@ -485,7 +513,6 @@ tbody tr:hover{background:color-mix(in srgb,var(--tape) 10%,transparent)}
       <div>
         <div class="eyebrow"><b>01</b> Abertura e escopo</div>
         <h2 style="margin-top:16px">Uma consultoria em <span>três etapas</span></h2>
-        <div class="who"><span class="av">W</span>Apresenta: Welton Rocha · coordenação</div>
       </div>
       <p class="lead">Trabalho da disciplina de Gestão da Inovação, orientado pela professora Letícia Oliveira. Nosso objetivo: apresentar uma solução prática, acessível e adaptável à realidade da Retrô Kids.</p>
     </div>
@@ -589,26 +616,25 @@ tbody tr:hover{background:color-mix(in srgb,var(--tape) 10%,transparent)}
       <div>
         <div class="eyebrow"><b>03</b> Diagnóstico organizacional</div>
         <h2 style="margin-top:16px">Forças de sobra. O desafio está <span>no balcão</span>.</h2>
-        <div class="who"><span class="av">A</span>Apresenta: Arthur Rebouças · pesquisa e diagnóstico</div>
       </div>
       <p class="lead">Análise SWOT feita a partir das informações públicas da empresa. Os itens internos são hipóteses e precisam ser validados com a gestão. Toque em cada quadrante para abrir.</p>
     </div>
 
     <div class="swot" id="swot">
       <button class="flip" aria-expanded="false" style="--c:#1F8F7C"><div class="in">
-        <div class="f"><span class="k">F</span><h3>Forças</h3><small>Ambiente interno · toque para ver</small></div>
+        <div class="f"><span class="k">F</span><h3>Forças</h3><small>Ambiente interno</small></div>
         <div class="b"><h3>Forças</h3><ul><li>Experiência no mercado desde 2007</li><li>Confecção própria e personalização</li><li>Atendimento sob encomenda</li><li>Clientes individuais e institucionais</li></ul></div>
       </div></button>
       <button class="flip" aria-expanded="false" style="--c:#2B4DB8"><div class="in">
-        <div class="f"><span class="k">O</span><h3>Oportunidades</h3><small>Ambiente externo · toque para ver</small></div>
+        <div class="f"><span class="k">O</span><h3>Oportunidades</h3><small>Ambiente externo</small></div>
         <div class="b"><h3>Oportunidades</h3><ul><li>Crescimento da compra e do orçamento por canais digitais</li><li>Redes sociais e WhatsApp para captar clientes</li><li>Entregas para todo o Brasil</li></ul></div>
       </div></button>
       <button class="flip" aria-expanded="false" style="--c:#C98A00"><div class="in">
-        <div class="f"><span class="k">F</span><h3>Fragilidades</h3><small>Ambiente interno · toque para ver</small></div>
+        <div class="f"><span class="k">F</span><h3>Fragilidades</h3><small>Ambiente interno</small></div>
         <div class="b"><h3>Fragilidades</h3><ul><li>Possível dependência de processos manuais no orçamento</li><li>Informações de clientes possivelmente dispersas</li><li>Ausência de indicadores formalizados de vendas e atendimento</li></ul><span class="tag warn">Hipóteses a validar</span></div>
       </div></button>
       <button class="flip" aria-expanded="false" style="--c:#C4324B"><div class="in">
-        <div class="f"><span class="k">A</span><h3>Ameaças</h3><small>Ambiente externo · toque para ver</small></div>
+        <div class="f"><span class="k">A</span><h3>Ameaças</h3><small>Ambiente externo</small></div>
         <div class="b"><h3>Ameaças</h3><ul><li>Concorrência de confecções locais e fornecedores digitais</li><li>Pressão por preços e prazos mais curtos</li><li>Setor de vestuário em desaceleração</li></ul></div>
       </div></button>
     </div>
@@ -654,7 +680,6 @@ tbody tr:hover{background:color-mix(in srgb,var(--tape) 10%,transparent)}
       <div>
         <div class="eyebrow"><b>04</b> Proposta de inovação</div>
         <h2 style="margin-top:16px">RetroKids <span>Pedido Fácil</span></h2>
-        <div class="who"><span class="av">AJ</span>Apresenta: Adiran Júnior · a solução</div>
       </div>
       <p class="lead">Um fluxo digital que integra atendimento, organização e gestão. Seis peças simples, de baixo custo, costuradas num só processo.</p>
     </div>
@@ -723,7 +748,6 @@ tbody tr:hover{background:color-mix(in srgb,var(--tape) 10%,transparent)}
       <div>
         <div class="eyebrow"><b>06</b> Justificativa e benefícios</div>
         <h2 style="margin-top:16px">Por que <span>essa</span> proposta</h2>
-        <div class="who"><span class="av">I</span>Apresenta: Igor Meira · justificativa e implementação</div>
       </div>
       <p class="lead">Produto personalizado exige informação correta, comunicação eficiente e acompanhamento. A proposta começa com ferramentas gratuitas ou baratas e cresce conforme a necessidade.</p>
     </div>
@@ -749,12 +773,11 @@ tbody tr:hover{background:color-mix(in srgb,var(--tape) 10%,transparent)}
       <div>
         <div class="eyebrow"><b>07</b> Plano de implementação</div>
         <h2 style="margin-top:16px">Nove semanas, <span>um piloto</span>, zero pressa</h2>
-        <div class="who"><span class="av">W</span><span class="av" style="margin-left:-20px;background:var(--coral);color:#fff">I</span>Welton Rocha e Igor Meira</div>
       </div>
       <p class="lead">Começa pelos uniformes e fardamentos, categoria com potencial de recorrência institucional. Testar em pequena escala antes de ampliar para o resto do portfólio.</p>
     </div>
 
-    <div class="gantt" tabindex="0" aria-label="Cronograma de 9 semanas, role na horizontal">
+    <div class="gantt" aria-label="Cronograma de 9 semanas">
       <div class="gt" id="gantt"></div>
     </div>
 
@@ -807,7 +830,6 @@ tbody tr:hover{background:color-mix(in srgb,var(--tape) 10%,transparent)}
       <div>
         <div class="eyebrow"><b>08</b> Riscos e indicadores</div>
         <h2 style="margin-top:16px">O que pode dar errado, e <span>como medir</span> o que der certo</h2>
-        <div class="who"><span class="av">A</span>Apresenta: Arthur Rebouças</div>
       </div>
       <p class="lead">Toda inovação encontra resistência. Para cada risco, uma medida preventiva. Para cada objetivo, um número que mostra se a solução funciona.</p>
     </div>
@@ -844,29 +866,12 @@ tbody tr:hover{background:color-mix(in srgb,var(--tape) 10%,transparent)}
     <div class="ruler" aria-hidden="true"></div>
     <div class="sec-head">
       <div>
-        <div class="eyebrow"><b>09</b> Equipe e validação</div>
-        <h2 style="margin-top:16px">Quatro alunos, <span>40 minutos</span> de devolutiva</h2>
+        <div class="eyebrow"><b>09</b> Equipe</div>
+        <h2 style="margin-top:16px">Quem fez a <span>consultoria</span></h2>
       </div>
-      <p class="lead">Depois da apresentação, a palavra é da Retrô Kids. Queremos saber se a proposta conversa com as necessidades reais da empresa.</p>
+      <p class="lead">Quatro estudantes de Administração da FAINOR, orientados pela professora Letícia Oliveira.</p>
     </div>
     <div class="team" id="team"></div>
-
-    <div class="grid g2" style="margin-top:40px;align-items:start">
-      <div class="card rv">
-        <h3>Tempo de fala</h3>
-        <div class="chart-box" style="height:260px"><canvas id="cTime" aria-label="Distribuição do tempo de apresentação por integrante"></canvas></div>
-      </div>
-      <div class="rv">
-        <div class="eyebrow" style="margin-bottom:10px"><b>Perguntas</b> para a gestão</div>
-        <ol class="qs">
-          <li>Atualmente, como são realizados os orçamentos?</li>
-          <li>Qual é a maior dificuldade no acompanhamento dos pedidos?</li>
-          <li>A empresa já utiliza alguma ferramenta para organizar clientes e pedidos?</li>
-          <li>Qual etapa da proposta seria mais interessante implementar primeiro?</li>
-          <li>Existe alguma sugestão de melhoria para a solução apresentada?</li>
-        </ol>
-      </div>
-    </div>
   </div>
 </section>
 
@@ -1047,7 +1052,10 @@ render(); updWa();
 
 /* ---------- SWOT ---------- */
 $$('.flip').forEach(f=>f.addEventListener('click',()=>f.setAttribute('aria-expanded',f.getAttribute('aria-expanded')!=='true')));
-setTimeout(()=>{ const first=$('.flip'); if(first && !RM){ first.setAttribute('aria-expanded','true'); } },0);
+const FLIPICON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 15.5-6.2L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15.5 6.2L3 16"/><path d="M3 21v-5h5"/></svg>';
+$$('.flip .f').forEach(f=>f.insertAdjacentHTML('beforeend',`<span class="flip-hint" aria-hidden="true">${FLIPICON}${TOUCH?'Toque':'Clique'} para virar</span>`));
+// um "espiar" rápido no primeiro cartão quando a SWOT aparece, mostrando que ele vira
+if(!RM){ const sw=new IntersectionObserver(es=>{ if(es[0].isIntersecting){ sw.disconnect(); const fi=$('.flip .in'); fi.classList.add('nudge'); fi.addEventListener('animationend',()=>fi.classList.remove('nudge'),{once:false}); } },{threshold:.5}); sw.observe($('#swot')); }
 
 /* ---------- Gantt ---------- */
 const g=$('#gantt'); const rows=[
@@ -1093,7 +1101,7 @@ const team=[
  ['AJ','Adiran Júnior','Redação',8,'#C4324B',['Proposta de inovação','Funcionamento do Pedido Fácil','Demonstração visual']],
  ['IM','Igor Meira','Revisão',12,'#C98A00',['Justificativa e benefícios','Priorização','Plano de implementação (2ª parte)']]
 ];
-$('#team').innerHTML=team.map(t=>`<div class="mem rv" style="--c:${t[4]}"><span class="min">${t[3]}<small>min</small></span><div class="av">${t[0]}</div><h3>${t[1]}</h3><div class="role">${t[2]} no relatório</div><ul>${t[5].map(x=>`<li>${x}</li>`).join('')}</ul></div>`).join('');
+$('#team').innerHTML=team.map(t=>`<div class="mem rv" style="--c:${t[4]}"><div class="av">${t[0]}</div><h3>${t[1]}</h3><div class="role">${t[2]} no relatório</div><ul>${t[5].map(x=>`<li>${x}</li>`).join('')}</ul></div>`).join('');
 
 /* ---------- charts ---------- */
 const charts={};
@@ -1107,17 +1115,71 @@ const builders={
    {label:'Linha de base',data:[100,100,100,100,100],backgroundColor:tok('--surface-2'),borderColor:tok('--muted'),borderWidth:1,borderRadius:6},
    {label:'Meta',data:[70,115,75,110,110],backgroundColor:[tok('--mint'),tok('--blue'),tok('--mint'),tok('--blue'),tok('--blue')],borderRadius:6}]},
    options:{maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{usePointStyle:true}}},scales:{y:{min:0,max:130,grid:{color:tok('--line')}},x:{grid:{display:false}}},animation:{duration:RM?0:1400,delay:c=>RM?0:c.dataIndex*120}}}),
- cTime:()=>({type:'doughnut',data:{labels:['Welton · 11 min','Igor · 12 min','Arthur · 9 min','Adiran · 8 min'],datasets:[{data:[11,12,9,8],backgroundColor:['#2B4DB8','#C98A00','#1F8F7C','#C4324B'],borderColor:tok('--surface'),borderWidth:4,hoverOffset:10}]},
-   options:{maintainAspectRatio:false,cutout:'62%',plugins:{legend:{position:'right',labels:{usePointStyle:true,padding:14}}},animation:{animateRotate:!RM,duration:RM?0:1400}}})
 };
 function makeChart(id){ if(charts[id]||!window.Chart)return; base(); charts[id]=new Chart($('#'+id),builders[id]()); }
-['cMarket','cCost','cKpi','cTime'].forEach(id=>{const c=$('#'+id); c.dataset.chart=id; io.observe(c);});
+['cMarket','cCost','cKpi'].forEach(id=>{const c=$('#'+id); c.dataset.chart=id; io.observe(c);});
 setTimeout(()=>Object.keys(builders).forEach(makeChart),4000);
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{Object.keys(charts).forEach(k=>{charts[k].destroy();delete charts[k];makeChart(k)}); $$('[data-ring]').forEach(r=>r.querySelector('.fg').style.stroke=tok(r.dataset.color))});
 
 $$(TOUCH?'[data-count],[data-ring],.gt .bar':'.rv,[data-count],[data-ring],.gt .bar').forEach(el=>io.observe(el));
 // rótulos das células do 5W2H para o modo empilhado
 (function(){const hs=$$('.tbl thead th').map(th=>th.firstChild.textContent.trim());$$('.tbl tbody tr').forEach(tr=>[...tr.children].forEach((td,i)=>td.dataset.label=hs[i]||''))})();
+
+/* ---------- dicas de interação ---------- */
+const VERB=TOUCH?'Toque':'Clique';
+const ARROW='<svg class="go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+const HAND='<svg class="tap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11V5a2 2 0 0 1 4 0v5"/><path d="M13 10V9a2 2 0 0 1 4 0v2"/><path d="M17 11a2 2 0 0 1 4 0v3a7 7 0 0 1-7 7h-1a7 7 0 0 1-5.6-2.8L4 14.5a2 2 0 0 1 3-2.6L9 14"/></svg>';
+function addHint(el,html,icon){ if(!el)return; el.insertAdjacentHTML('beforebegin',`<p class="hint">${icon||HAND}<span>${html}</span></p>`); }
+addHint($('.cat-tools'),`${VERB} numa área para filtrar. “Simular orçamento” leva à demonstração.`);
+addHint($('#swot'),`${VERB} nos cartões para virar e ver o conteúdo.`);
+addHint($('#orderForm'),'Edite os campos: a mensagem do WhatsApp muda na hora.');
+addHint($('.board'),`${VERB} em “Avançar etapa” para mover o pedido pelo processo.`);
+
+/* ---------- gráficos revelados ao arrastar ---------- */
+const PILLARROW='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+const scrubs={};
+function scrub(box,o){
+  box.classList.add('scrub'); box.tabIndex=0; box.setAttribute('role','slider');
+  box.setAttribute('aria-label',o.label+'. Use as setas para revelar.'); box.setAttribute('aria-valuemin','0'); box.setAttribute('aria-valuemax','100');
+  box.insertAdjacentHTML('beforeend','<div class="scrub-veil"></div><div class="scrub-edge"><span class="scrub-pill"></span></div>');
+  const pill=box.querySelector('.scrub-pill'); let p=0, last='';
+  const minOf=()=>Math.max(0,Math.min(.6,o.min?o.min():0));
+  function set(v){
+    if(box.classList.contains('done'))return;
+    const mn=minOf(); p=Math.max(mn,Math.min(1,v)); const f=(p-mn)/(1-mn||1);
+    box.style.setProperty('--p',(p*100).toFixed(2)+'%'); box.setAttribute('aria-valuenow',Math.round(f*100));
+    const t=o.text(f); if(t!==last){last=t;pill.innerHTML=t+PILLARROW}
+    if(f>=.96){ box.classList.add('done'); box.style.setProperty('--p','100%'); box.setAttribute('aria-valuenow','100'); }
+  }
+  function reset(){ const mn=minOf(); if(p<=mn+.12) set(mn+.1*(1-mn)); }
+  let act=false, eng=false, sx=0, sy=0, id=null;
+  const fromX=x=>{const r=box.getBoundingClientRect();return (x-r.left)/r.width};
+  box.addEventListener('pointerdown',e=>{ if(box.classList.contains('done'))return; act=true;eng=false;sx=e.clientX;sy=e.clientY;id=e.pointerId; });
+  box.addEventListener('pointermove',e=>{
+    if(!act||e.pointerId!==id)return; const dx=e.clientX-sx, dy=e.clientY-sy;
+    if(!eng){ if(Math.abs(dx)>(e.pointerType==='mouse'?3:8) && Math.abs(dx)>Math.abs(dy)){ eng=true; box.classList.add('dragging'); try{box.setPointerCapture(id)}catch(_){} } else return; }
+    set(Math.max(p,fromX(e.clientX)));
+  });
+  const end=e=>{ if(!act)return; if(!eng && e.type==='pointerup' && Math.abs(e.clientX-sx)<8 && Math.abs(e.clientY-sy)<8) set(Math.max(p,fromX(e.clientX))); act=false; eng=false; box.classList.remove('dragging'); };
+  box.addEventListener('pointerup',end); box.addEventListener('pointercancel',end);
+  box.addEventListener('keydown',e=>{ if(e.key==='ArrowRight'||e.key==='ArrowUp'){e.preventDefault();set(p+.12)} if(e.key==='End'){e.preventDefault();set(1)} });
+  box._reset=reset; reset(); return box;
+}
+const gBox=$('.gantt');
+addHint(gBox,`Arraste${TOUCH?'':' ou clique'} sobre o cronograma para avançar as semanas.`,ARROW);
+scrubs.gantt=scrub(gBox,{label:'Cronograma de 9 semanas',
+  min:()=>{const n=$('.gt .nm'),r=gBox.getBoundingClientRect();return n?(n.getBoundingClientRect().right-r.left)/r.width:.25},
+  text:f=>f<.12?'Arraste':'Semana '+Math.min(9,Math.max(1,Math.ceil(f*9)))+' de 9'});
+[['cMarket','Projeções da Abit'],['cCost','Faixa de custo por atividade'],['cKpi','Linha de base e metas']].forEach(([id,label])=>{
+  const box=$('#'+id).parentElement;
+  addHint(box,`Arraste${TOUCH?'':' ou clique'} sobre o gráfico para revelar.`,ARROW);
+  scrubs[id]=scrub(box,{label,
+    min:()=>{const c=charts[id];return c&&c.chartArea?c.chartArea.left/box.clientWidth:.1},
+    text:f=>f<.12?'Arraste':f<.6?'Continue':'Quase lá'});
+});
+const _mk=makeChart; makeChart=function(id){ _mk(id); if(scrubs[id]) requestAnimationFrame(()=>scrubs[id]._reset()); };
+addEventListener('resize',()=>Object.values(scrubs).forEach(b=>b._reset()));
+addEventListener('load',()=>Object.values(scrubs).forEach(b=>b._reset()));
 
 /* ---------- copiar ---------- */
 $('#copyWa').addEventListener('click',()=>{const t=$('#wa').textContent;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast('Número copiado')).catch(()=>{const r=document.createRange();r.selectNodeContents($('#wa'));const s=getSelection();s.removeAllRanges();s.addRange(r);toast('Número selecionado, use Ctrl+C')})});
@@ -1187,9 +1249,12 @@ function three(){
   new ResizeObserver(size).observe(stage); size();
 
   let tx=0,ty=0,rx=0,ry=0,drag=false,lx=0,ly=0,spin=0,vis=true;
-  stage.addEventListener('pointermove',e=>{ if(e.pointerType!=='mouse')return; const r=stage.getBoundingClientRect();tx=((e.clientX-r.left)/r.width-.5);ty=((e.clientY-r.top)/r.height-.5);
-    if(drag){spin+=(e.clientX-lx)*.01;ry+=(e.clientY-ly)*.004;lx=e.clientX;ly=e.clientY}});
-  canvas.addEventListener('pointerdown',e=>{ if(e.pointerType!=='mouse')return; drag=true;lx=e.clientX;ly=e.clientY;canvas.style.cursor='grabbing'});
+  // mouse: paralaxe + arrastar; toque: arrastar na horizontal gira (a vertical continua rolando a página)
+  stage.addEventListener('pointermove',e=>{
+    if(e.pointerType==='mouse'){const r=stage.getBoundingClientRect();tx=((e.clientX-r.left)/r.width-.5);ty=((e.clientY-r.top)/r.height-.5);}
+    if(drag){spin+=(e.clientX-lx)*(e.pointerType==='mouse'?.01:.014);if(e.pointerType==='mouse')ry+=(e.clientY-ly)*.004;lx=e.clientX;ly=e.clientY}});
+  canvas.addEventListener('pointerdown',e=>{ drag=true;lx=e.clientX;ly=e.clientY;canvas.style.cursor='grabbing'});
+  addEventListener('pointercancel',()=>{drag=false});
   addEventListener('pointerup',()=>{drag=false;canvas.style.cursor='grab'});
   new IntersectionObserver(es=>{vis=es[0].isIntersecting;if(vis&&!RM)loop()}).observe(stage);
 
