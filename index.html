@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>Retrô Kids Pedido Fácil</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -33,8 +33,10 @@
   --hero:#080D1C; --hero-ink:#F3F5FF; --hero-muted:#9AA6C8; --shadow:0 18px 40px -22px rgba(0,0,0,.7); color-scheme:dark }
 
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--ink);font:400 17px/1.6 var(--f-body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+/* rolagem só vertical, sem zoom por pinça ou toque duplo */
+html{overflow-x:hidden;overflow-x:clip;overscroll-behavior-x:none;touch-action:pan-y;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{background:var(--bg);color:var(--ink);font:400 17px/1.6 var(--f-body);-webkit-font-smoothing:antialiased;overflow-x:hidden;overflow-x:clip;touch-action:pan-y;-webkit-tap-highlight-color:transparent}
+@media (hover:hover) and (pointer:fine){ html{scroll-behavior:smooth} }
 h1,h2,h3,h4{font-family:var(--f-display);line-height:1.05;margin:0;text-wrap:balance;letter-spacing:-.02em}
 p{margin:0}
 a{color:inherit}
@@ -66,7 +68,8 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
   repeating-linear-gradient(90deg,rgba(31,22,0,.85) 0 1.5px,transparent 1.5px 50px) bottom/100% 10px no-repeat;}
 .tape .nums{position:absolute;left:0;top:3px;display:flex;font:500 9px/1 var(--f-mono);white-space:nowrap}
 .tape .nums span{width:100px;padding-left:3px}
-.tape .fill{position:absolute;inset:0 auto 0 0;width:0;background:rgba(20,33,74,.88);mix-blend-mode:multiply}
+.tape .fill{position:absolute;inset:0;background:rgba(20,33,74,.88);transform:scaleX(0);transform-origin:left;will-change:transform}
+.menu-btn{display:none;margin-left:auto;align-items:center;gap:8px;font:600 14px/1 var(--f-body);color:var(--hero-ink);background:rgba(255,255,255,.1);border:0;border-radius:10px;padding:10px 12px;cursor:pointer}
 .tape .cm{position:absolute;right:max(16px, env(safe-area-inset-right, 0px));top:4px;font:500 10px/1 var(--f-mono);background:var(--tape-ink);color:var(--tape);padding:2px 6px;border-radius:3px}
 
 /* ---------- hero ---------- */
@@ -189,15 +192,15 @@ section.sec{padding-block:96px 40px;scroll-margin-top:70px}
 .flip .b .tag{margin-top:auto;align-self:flex-start}
 
 /* processo */
-.flow{display:flex;gap:0;overflow-x:auto;padding:6px 2px 18px;scroll-snap-type:x mandatory}
-.flow li{list-style:none;flex:1 0 140px;scroll-snap-align:start;position:relative;padding-right:14px}
+.flow{padding:6px 2px 18px}
+.flow li{list-style:none;position:relative;padding-right:14px;min-width:0}
 .flow li::before{content:"";position:absolute;top:21px;left:44px;right:0;border-top:2px dashed var(--line)}
 .flow li:last-child::before{display:none}
 .flow .n{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--surface);border:1.5px solid var(--line);font:500 14px/1 var(--f-mono);position:relative;z-index:1}
 .flow li.hot .n{background:var(--coral);border-color:var(--coral);color:#fff}
 .flow h4{font:600 15px/1.25 var(--f-body);margin-top:12px}
 .flow p{font-size:13px;color:var(--muted);margin-top:4px}
-.flow ol{margin:0;padding:0;display:flex;min-width:1100px}
+.flow ol{margin:0;padding:0;display:grid;grid-template-columns:repeat(8,minmax(0,1fr));row-gap:26px}
 
 .challenge{background:var(--hero);color:var(--hero-ink);border-radius:22px;padding:clamp(28px,4vw,48px);display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:36px;align-items:center;margin-top:28px}
 .challenge h3{font-size:clamp(28px,3.4vw,44px);font-weight:800}
@@ -363,6 +366,57 @@ tbody tr:hover{background:color-mix(in srgb,var(--tape) 10%,transparent)}
   .ringrow{flex-direction:column;align-items:flex-start}
   .stage .label{display:none}
 }
+/* ---- telas menores: nada rola para o lado, tudo empilha na vertical ---- */
+@media (max-width: 1020px){
+  .menu-btn{display:inline-flex}
+  .top .wrap{position:relative}
+  .nav{display:none;position:absolute;top:100%;left:0;right:0;margin:0;flex-direction:column;gap:2px;overflow:visible;
+    background:var(--hero);padding:8px max(16px, env(safe-area-inset-right, 0px)) 14px max(16px, env(safe-area-inset-left, 0px));
+    box-shadow:0 20px 30px -20px rgba(0,0,0,.6);border-top:1px solid rgba(255,255,255,.08)}
+  .nav.open{display:flex}
+  .nav a{font-size:16px;padding:14px 12px}
+  .flow ol{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .flow li:nth-child(4)::before{display:none}
+}
+@media (max-width: 900px){
+  .board{overflow:visible}
+  .cols{grid-template-columns:1fr;min-width:0}
+  .col{min-height:0}
+  .col:empty{display:none}
+  .gantt{overflow:visible}
+  .gt{min-width:0;grid-template-columns:minmax(0,1fr) repeat(9,minmax(14px,24px))}
+  .gt > div{padding:10px 8px;min-height:44px;font-size:13.5px}
+  .gt .hd{padding:10px 0;font-size:10px;justify-content:center}
+  .gt .hd:first-child{padding-left:8px}
+  .gt .bar{margin:0 2px;padding:0;font-size:0;min-height:0;height:22px;align-self:center;border-radius:6px}
+  .tbl{overflow:visible;border:0;background:none}
+  table{min-width:0}
+  thead{display:none}
+  table,tbody,tr,td{display:block;width:100%}
+  tbody{display:grid;gap:12px}
+  tr{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:6px 16px}
+  td{border-bottom:1px dashed var(--line);padding:9px 0;display:grid;grid-template-columns:92px minmax(0,1fr);gap:10px}
+  td::before{content:attr(data-label);font:500 10.5px/1.6 var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+  tr td:last-child{border-bottom:0}
+  td.money{white-space:normal}
+}
+@media (max-width: 720px){
+  .flow ol{grid-template-columns:1fr;row-gap:0}
+  .flow li{display:grid;grid-template-columns:44px minmax(0,1fr);column-gap:14px;padding:0 0 18px}
+  .flow li::before,.flow li:nth-child(4)::before{display:block;top:44px;bottom:0;left:21px;right:auto;border-top:0;border-left:2px dashed var(--line)}
+  .flow li:last-child::before{display:none}
+  .flow .n{grid-row:span 2}
+  .flow h4{margin-top:2px}
+}
+/* toque: sem efeitos pesados de GPU durante a rolagem */
+@media (hover:none), (pointer:coarse){
+  .top{backdrop-filter:none;-webkit-backdrop-filter:none;background:var(--hero)}
+  .products{perspective:none}
+  .prod{transform:none!important;will-change:auto;transform-style:flat}
+  .prod .ph svg,.prod:hover .ph svg{transform:none;filter:none}
+  .piece:hover{transform:none}
+  #spool{cursor:default;touch-action:pan-y}
+}
 @media (prefers-reduced-motion: reduce){
   *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 }
@@ -374,7 +428,7 @@ tbody tr:hover{background:color-mix(in srgb,var(--tape) 10%,transparent)}
 <header class="top" id="top">
   <div class="wrap">
     <a class="brand" href="#inicio">Retrô<i>Kids</i> <small>× FAINOR</small></a>
-    <nav class="nav" aria-label="Seções">
+    <nav class="nav" id="mainNav" aria-label="Seções">
       <a href="#escopo">Escopo</a>
       <a href="#empresa">A empresa</a>
       <a href="#diagnostico">Diagnóstico</a>
@@ -384,6 +438,8 @@ tbody tr:hover{background:color-mix(in srgb,var(--tape) 10%,transparent)}
       <a href="#indicadores">Indicadores</a>
       <a href="#equipe">Equipe</a>
     </nav>
+    <button class="menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="mainNav">Menu
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
   </div>
   <div class="tape" aria-hidden="true">
     <div class="ticks"></div>
@@ -856,6 +912,10 @@ tbody tr:hover{background:color-mix(in srgb,var(--tape) 10%,transparent)}
 <script>
 (function(){
 const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const TOUCH = matchMedia('(hover: none), (pointer: coarse)').matches;
+// bloqueia zoom por gesto no iOS (que ignora user-scalable=no)
+// (pinça e toque duplo já ficam bloqueados pelo touch-action: pan-y no CSS, sem listeners que travem a rolagem)
+['gesturestart','gesturechange','gestureend'].forEach(ev=>document.addEventListener(ev,e=>e.preventDefault(),{passive:false}));
 const $ = (s,el=document)=>el.querySelector(s), $$=(s,el=document)=>[...el.querySelectorAll(s)];
 const tok = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 
@@ -863,20 +923,31 @@ const tok = n => getComputedStyle(document.documentElement).getPropertyValue(n).
 const nums=$('#tapeNums'); let h='';for(let i=0;i<80;i++)h+='<span>'+i+'</span>';nums.innerHTML=h;
 const fill=$('#tapeFill'), cm=$('#tapeCm');
 const links=$$('.nav a'); const secs=links.map(a=>$(a.getAttribute('href')));
+// posições medidas só no carregamento/redimensionamento; a rolagem só lê números em cache
+let tops=[], maxS=1, ticking=false, lastCur=-2, lastCm=-1;
+function measure(){ maxS=Math.max(1,document.documentElement.scrollHeight-innerHeight); tops=secs.map(s=>s?s.getBoundingClientRect().top+scrollY:Infinity); }
 function onScroll(){
-  const max=document.documentElement.scrollHeight-innerHeight; const p=max>0?scrollY/max:0;
-  fill.style.width=(p*100)+'%'; cm.textContent=Math.round(p*150)+' cm';
-  let cur=-1; secs.forEach((s,i)=>{ if(s && s.getBoundingClientRect().top<innerHeight*.35) cur=i; });
-  links.forEach((a,i)=>a.classList.toggle('on',i===cur));
+  ticking=false; const y=scrollY, p=Math.min(1,Math.max(0,y/maxS));
+  fill.style.transform='scaleX('+p.toFixed(4)+')';
+  const c=Math.round(p*150); if(c!==lastCm){lastCm=c;cm.textContent=c+' cm'}
+  let cur=-1; const line=y+innerHeight*.35; tops.forEach((t,i)=>{ if(t<line) cur=i; });
+  if(cur!==lastCur){ lastCur=cur; links.forEach((a,i)=>a.classList.toggle('on',i===cur)); }
 }
-addEventListener('scroll',onScroll,{passive:true}); onScroll();
+addEventListener('scroll',()=>{ if(!ticking){ticking=true;requestAnimationFrame(onScroll)} },{passive:true});
+let rz; addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(()=>{measure();onScroll()},150)});
+addEventListener('load',()=>{measure();onScroll()}); measure(); onScroll();
+setTimeout(measure,1500); setTimeout(measure,4500);
+// menu do celular
+const menuBtn=$('#menuBtn'), navEl=$('#mainNav');
+menuBtn.addEventListener('click',()=>{const o=!navEl.classList.contains('open');navEl.classList.toggle('open',o);menuBtn.setAttribute('aria-expanded',o)});
+navEl.addEventListener('click',e=>{ if(e.target.closest('a')){navEl.classList.remove('open');menuBtn.setAttribute('aria-expanded','false')} });
 
 /* ---------- revelar ao entrar (conteúdo visível em repouso) ---------- */
 const seen=new WeakSet();
 const io=new IntersectionObserver(es=>es.forEach(e=>{
   if(!e.isIntersecting||seen.has(e.target))return; seen.add(e.target);
   const t=e.target;
-  if(!RM && t.classList.contains('rv')) t.animate([{transform:'translateY(26px)',opacity:.25},{transform:'none',opacity:1}],{duration:800,easing:'cubic-bezier(.2,.8,.2,1)'});
+  if(!RM && !TOUCH && t.classList.contains('rv')) t.animate([{transform:'translateY(26px)',opacity:.25},{transform:'none',opacity:1}],{duration:800,easing:'cubic-bezier(.2,.8,.2,1)'});
   if(t.dataset.count) countUp(t);
   if(t.dataset.ring) ring(t);
   if(t.dataset.chart) makeChart(t.dataset.chart);
@@ -986,7 +1057,7 @@ const g=$('#gantt'); const rows=[
  ['CRM e WhatsApp','Comercial',3,4,'#1F8F7C'],
  ['Treinamento da equipe','Gestão',4,4,'#C98A00'],
  ['Projeto-piloto','Equipe · uniformes e fardamentos',5,8,'#C4324B'],
- ['Avaliação e ajustes','Gestão',9,9,'#14214A']
+ ['Avaliação e ajustes','Gestão',9,9,'#7A5CD6']
 ];
 let gh='<div class="hd">Etapa</div>'+Array.from({length:9},(_,i)=>`<div class="hd">S${i+1}</div>`).join('');
 rows.forEach((r,i)=>{ gh+=`<div class="nm"><div>${r[0]}<small>${r[1]}</small></div></div>`;
@@ -1044,7 +1115,9 @@ function makeChart(id){ if(charts[id]||!window.Chart)return; base(); charts[id]=
 setTimeout(()=>Object.keys(builders).forEach(makeChart),4000);
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{Object.keys(charts).forEach(k=>{charts[k].destroy();delete charts[k];makeChart(k)}); $$('[data-ring]').forEach(r=>r.querySelector('.fg').style.stroke=tok(r.dataset.color))});
 
-$$('.rv,[data-count],[data-ring],.gt .bar').forEach(el=>io.observe(el));
+$$(TOUCH?'[data-count],[data-ring],.gt .bar':'.rv,[data-count],[data-ring],.gt .bar').forEach(el=>io.observe(el));
+// rótulos das células do 5W2H para o modo empilhado
+(function(){const hs=$$('.tbl thead th').map(th=>th.firstChild.textContent.trim());$$('.tbl tbody tr').forEach(tr=>[...tr.children].forEach((td,i)=>td.dataset.label=hs[i]||''))})();
 
 /* ---------- copiar ---------- */
 $('#copyWa').addEventListener('click',()=>{const t=$('#wa').textContent;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast('Número copiado')).catch(()=>{const r=document.createRange();r.selectNodeContents($('#wa'));const s=getSelection();s.removeAllRanges();s.addRange(r);toast('Número selecionado, use Ctrl+C')})});
@@ -1052,8 +1125,8 @@ $('#copyWa').addEventListener('click',()=>{const t=$('#wa').textContent;(navigat
 /* ---------- 3D: carretel, agulha e botões ---------- */
 function three(){
   if(!window.THREE)return; const canvas=$('#spool'); const stage=canvas.parentElement;
-  let renderer; try{renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});}catch(e){return}
-  renderer.setPixelRatio(Math.min(2,devicePixelRatio));
+  let renderer; try{renderer=new THREE.WebGLRenderer({canvas,antialias:!TOUCH,alpha:true,powerPreference:TOUCH?'low-power':'high-performance'});}catch(e){return}
+  renderer.setPixelRatio(TOUCH?Math.min(1.5,devicePixelRatio):Math.min(2,devicePixelRatio));
   const scene=new THREE.Scene(); const cam=new THREE.PerspectiveCamera(36,1,.1,100); cam.position.set(0,0.4,9);
   scene.add(new THREE.AmbientLight(0xffffff,.55));
   const key=new THREE.DirectionalLight(0xffffff,1.1); key.position.set(4,6,6); scene.add(key);
@@ -1109,13 +1182,14 @@ function three(){
   const spots=[[-1.9,1.9,.4],[2.6,-.6,.6],[1.2,2.3,.9],[-3,.9,-1],[2.9,.9,1.2],[-.6,-2.6,.2],[.3,2.9,-1.6],[3.2,-2.2,-.8]];
   spots.forEach((p,i)=>{const b=makeBtn(btnCols[i%btnCols.length],.22+((i*37)%10)/40);b.position.set(...p);b.rotation.set(Math.random()*3,Math.random()*3,Math.random()*3);b.userData={y:p[1],sp:.6+Math.random()*.8,ph:Math.random()*6,rx:(Math.random()-.5)*.02,ry:(Math.random()-.5)*.02};world.add(b);buttons.push(b)});
 
-  function size(){const w=stage.clientWidth,h=stage.clientHeight||420;renderer.setSize(w,h,false);cam.aspect=w/h;cam.position.z=w<520?11:9;cam.updateProjectionMatrix()}
+  // só redimensiona quando a LARGURA muda (a barra do navegador no celular muda a altura ao rolar)
+  let lastW=0; function size(){const w=stage.clientWidth,h=stage.clientHeight||420; if(w===lastW)return; lastW=w; renderer.setSize(w,h,false);cam.aspect=w/h;cam.position.z=w<520?11:9;cam.updateProjectionMatrix()}
   new ResizeObserver(size).observe(stage); size();
 
   let tx=0,ty=0,rx=0,ry=0,drag=false,lx=0,ly=0,spin=0,vis=true;
-  stage.addEventListener('pointermove',e=>{const r=stage.getBoundingClientRect();tx=((e.clientX-r.left)/r.width-.5);ty=((e.clientY-r.top)/r.height-.5);
+  stage.addEventListener('pointermove',e=>{ if(e.pointerType!=='mouse')return; const r=stage.getBoundingClientRect();tx=((e.clientX-r.left)/r.width-.5);ty=((e.clientY-r.top)/r.height-.5);
     if(drag){spin+=(e.clientX-lx)*.01;ry+=(e.clientY-ly)*.004;lx=e.clientX;ly=e.clientY}});
-  canvas.addEventListener('pointerdown',e=>{drag=true;lx=e.clientX;ly=e.clientY;canvas.style.cursor='grabbing'});
+  canvas.addEventListener('pointerdown',e=>{ if(e.pointerType!=='mouse')return; drag=true;lx=e.clientX;ly=e.clientY;canvas.style.cursor='grabbing'});
   addEventListener('pointerup',()=>{drag=false;canvas.style.cursor='grab'});
   new IntersectionObserver(es=>{vis=es[0].isIntersecting;if(vis&&!RM)loop()}).observe(stage);
 
