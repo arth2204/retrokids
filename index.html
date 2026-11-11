@@ -70,7 +70,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .tape .nums span{width:100px;padding-left:3px}
 .tape .fill{position:absolute;inset:0;background:rgba(20,33,74,.88);transform:scaleX(0);transform-origin:left;will-change:transform}
 .menu-btn{display:none;margin-left:auto;align-items:center;gap:8px;font:600 14px/1 var(--f-body);color:var(--hero-ink);background:rgba(255,255,255,.1);border:0;border-radius:10px;padding:10px 12px;cursor:pointer}
-.tape .cm{position:absolute;right:max(16px, env(safe-area-inset-right, 0px));top:4px;font:500 10px/1 var(--f-mono);background:var(--tape-ink);color:var(--tape);padding:2px 6px;border-radius:3px}
+.tape .cm{position:absolute;right:max(16px, env(safe-area-inset-right, 0px));top:4px;font:500 10px/1 var(--f-mono);background:var(--tape-ink);color:var(--tape);padding:2px 6px;border-radius:3px;min-width:52px;text-align:center;contain:layout paint}
 
 /* ---------- hero ---------- */
 .hero{background:var(--hero);color:var(--hero-ink);position:relative;overflow-x:hidden;overflow-x:clip}
@@ -1076,7 +1076,7 @@ function onScroll(){
   if(cur!==lastCur){ lastCur=cur; links.forEach((a,i)=>a.classList.toggle('on',i===cur)); }
 }
 addEventListener('scroll',()=>{ if(!ticking){ticking=true;requestAnimationFrame(onScroll)} },{passive:true});
-let rz; addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(()=>{measure();onScroll()},150)});
+let rz, lastIW=innerWidth; addEventListener('resize',()=>{ if(innerWidth===lastIW) return; lastIW=innerWidth; clearTimeout(rz); rz=setTimeout(()=>{measure();onScroll()},150); });
 addEventListener('load',()=>{measure();onScroll()}); measure(); onScroll();
 setTimeout(measure,1500); setTimeout(measure,4500);
 // menu do celular
@@ -1126,6 +1126,9 @@ prodEl.innerHTML=products.map(p=>`<article class="prod" data-k="${p.k}" style="-
     environment-image="neutral" exposure="1.05" shadow-intensity="1" shadow-softness="1" tone-mapping="commerce"></model-viewer>
   <span class="tag">${p.t}</span><span class="spin" aria-hidden="true">${SPIN}360°</span></div>
   <div class="bd"><h3>${p.n}</h3><p>${p.d}</p><div class="row"><span class="mono">${p.m}</span><button type="button" data-p="${p.p}">Simular orçamento</button></div></div></article>`).join('');
+if(!RM){ const mvs=$$('.prod model-viewer'); let idle, paused=false;
+  addEventListener('scroll',()=>{ if(!paused){ paused=true; mvs.forEach(m=>m.removeAttribute('auto-rotate')); }
+    clearTimeout(idle); idle=setTimeout(()=>{ paused=false; mvs.forEach(m=>m.setAttribute('auto-rotate','')); },220); },{passive:true}); }
 $$('.prod model-viewer').forEach(mv=>{
   mv.addEventListener('load',()=>mv.parentElement.classList.add('ready'),{once:true});
   // no mouse: a peça acelera ao passar por cima, como numa vitrine giratória
@@ -1503,7 +1506,7 @@ scrubs.gantt=scrub(gBox,{label:'Cronograma de 9 semanas',
     text:f=>f<.12?'Arraste':f<.6?'Continue':'Quase lá'});
 });
 const _mk=makeChart; makeChart=function(id){ _mk(id); if(scrubs[id]) requestAnimationFrame(()=>scrubs[id]._reset()); };
-addEventListener('resize',()=>Object.values(scrubs).forEach(b=>b._reset()));
+let scrubIW=innerWidth; addEventListener('resize',()=>{ if(innerWidth===scrubIW) return; scrubIW=innerWidth; Object.values(scrubs).forEach(b=>b._reset()); });
 addEventListener('load',()=>Object.values(scrubs).forEach(b=>b._reset()));
 
 /* ---------- copiar ---------- */
